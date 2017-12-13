@@ -11,6 +11,8 @@
 
 #include <stdlib.h>
 
+namespace px {
+
 template <typename T>
 class Container {
   T *start, *nd;
@@ -48,3 +50,5 @@ public:
   const_iterator cend () { return (const_iterator) nd; }
 
 };
+
+}
