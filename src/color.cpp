@@ -46,7 +46,9 @@ px::RGBAColor::FromHSVA (float h, const float s, const float v, const float a)
     b = x;
     break;
   default:
-    break;
+    r = 0;
+    g = 0;
+    b = 0;
   }
 
   const float m = v - chroma;
