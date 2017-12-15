@@ -39,7 +39,7 @@ public:
   }
 
   template <typename... Args>
-  void set_emplace (size_t i, Args&&... args) {
+  void emplace (size_t i, Args&&... args) {
     if (i < nd - start)
       new (start + i) value_type (args...);
   }
