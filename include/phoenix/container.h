@@ -15,7 +15,8 @@ namespace px {
 
 template <typename T>
 class Container {
-  T *start, *nd;
+protected:
+  T *start, *nd, *last;
 
 public:
   typedef T value_type;
@@ -25,6 +26,7 @@ public:
   Container (size_t n) {
     start = (T *) malloc(n * sizeof(T));
     nd = start + n;
+    last = (T *) 0;
   }
 
   T &operator[] (size_t i) {
@@ -45,10 +47,25 @@ public:
   }
 
   iterator begin () { return start; }
-  iterator end () { return nd; }
+  iterator end () {
+    if (last) return last;
+    else return nd;
+  }
   const_iterator cbegin () { return (const_iterator) start; }
   const_iterator cend () { return (const_iterator) nd; }
 
+};
+
+template <typename T, size_t N>
+class StaticContainer : public Container<T> {
+  char space[N * sizeof(T)];
+
+public:
+  StaticContainer () {
+    start = (T *) space;
+    nd = start + N;
+    last = (T *) 0;
+  }
 };
 
 }

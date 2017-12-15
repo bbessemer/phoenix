@@ -33,4 +33,7 @@ hitmarker_tex,
 meme_texes[13],
 fashion_texes[44];
 
+// Hitmarkers
+px::StaticContainer<px::Box2D, 69> hitmarkers;
+
 }
