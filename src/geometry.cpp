@@ -11,6 +11,12 @@ px::Rotation2D::Rotation2D (float theta) : center(0, 0) {
   sin = sinf(theta);
 }
 
+px::Rotation2D::Rotation2D (float theta, float c_x, float c_y) :
+  center (c_x, c_y) {
+  cos = cosf(theta);
+  sin = sinf(theta);
+}
+
 void px::Rotation2D::step (float dth) {
   float cos_ = cos;
   cos -= sin * dth;
