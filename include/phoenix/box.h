@@ -14,11 +14,11 @@ struct px_rotation {
 };
 
 struct px_box {
-    unsigned int ent_id;
     float x, y, w, h;
     struct px_rotation rotation;
-    px_tex_t texture;
     px_color_t color;
+    px_tex_t texture;
+    unsigned int ent_id;
 };
 
 typedef struct px_box px_box_t;
