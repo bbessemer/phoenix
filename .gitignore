@@ -1,5 +1,5 @@
-.o
-.bc
-.a
-.exe
+*.o
+*.bc
+*.a
+*.exe
 target/

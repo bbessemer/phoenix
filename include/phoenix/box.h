@@ -1,46 +1,32 @@
 /*
- * Copyright (C) 2017 Brent Bessemer.
+ * Copyright (C) 2017-2018 Brent Bessemer.
  * All rights reserved.
- */
-
-/**
- *
  */
 
 #pragma once
 
-#include "entity.h"
+#include "texture.h"
 #include "color.h"
-#include "geometry.h"
 
-namespace px {
-
-class Box2D : public Entity {
-public:
-  float x, y, w, h;
-  Rotation2D rotation;
-  RGBAColor color;
-  // TODO Texture tex;
-
-  Box2D (float x, float y, float w, float h) :
-    Entity(),
-    x(x), y(y), w(w), h(h),
-    rotation(0),
-    color(0.f, 0.f, 0.f, 0.f) {}
-
-  Box2D (float x, float y, float w, float h, float theta, float r_x, float r_y,
-    float r, float g, float b, float a) :
-    Entity(),
-    x(x), y(y), w(w), h(h),
-    rotation(theta, r_x, r_y),
-    color(r, g, b, a) {}
-
-  inline void setDims (float x_n, float y_n, float w_n, float h_n) {
-    x = x_n;
-    y = y_n;
-    w = w_n;
-    h = h_n;
-  }
+struct px_rotation {
+    float cx, cy;
+    float cos, sin;
 };
 
-}
+struct px_box {
+    unsigned int ent_id;
+    float x, y, w, h;
+    struct px_rotation rotation;
+    px_tex_t texture;
+    px_color_t color;
+};
+
+typedef struct px_box px_box_t;
+typedef struct px_rotation px_rotation_t;
+
+void pxSetBoxDims (px_box_t *box, float x, float y, float w, float h);
+void pxSetBoxSize (px_box_t *box, float w, float h);
+void pxSetBoxPos (px_box_t *box, float x, float y);
+
+void pxSetRotation (px_rotation_t *rot, float theta);
+void pxStepRotation (px_rotation_t *rot, float dt);
