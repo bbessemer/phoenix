@@ -6,6 +6,7 @@
 #pragma once
 
 #include <stdio.h>
+#include <stdlib.h>
 
 static char px_err[256];
 
@@ -14,4 +15,5 @@ static void pxFatal (const char *sysname, const char *msg, int line) {
         sysname, msg, line);
     puts(px_err);
     // TODO add messagebox
+    exit(-1);
 }

@@ -7,7 +7,13 @@
 #define _GNU_SOURCE
 
 #include <stdio.h>
+
+#ifdef __APPLE__
+#include <OpenGL/gl.h>
+#else
 #include <glad/glad.h>
+#endif
+
 #include <SDL2/SDL.h>
 #include <phoenix/renderer.h>
 #include <phoenix/request.h>
