@@ -6,38 +6,61 @@
  * All rights reserved.
  */
 
- #define PX_USE_GL
+#define PX_USE_GL
 
- #include <phoenix/phoenix.h>
+#include <stdlib.h>
+#include <time.h>
+#include <phoenix/phoenix.h>
 
- int main (void) {
-     px_box_t character, food, poison;
+#define ROUND_TIME 1.6
+static px_box_t character, food, poison;
+static float ttl;
+static float *ttl_array[] = {&ttl, NULL};
+static int score;
 
-     pxZeroBox(&character);
-     pxZeroBox(&food);
-     pxZeroBox(&poison);
+void reset () {
+    ttl = ROUND_TIME;
+    srand(time(NULL));
+    pxSetBoxPos(&food, rand() / (float) RAND_MAX * 1.5 - 1,
+        rand() / (float) RAND_MAX * 1.5 - 1);
+    pxSetBoxPos(&poison, rand() / (float) RAND_MAX * 1.5 - 1,
+        rand() / (float) RAND_MAX * 1.5 - 1);
+}
 
-     pxSetColor(&character.color, 0, 0, 1, 1);
-     pxSetColor(&food.color, 0, 1, 0, 1);
-     pxSetColor(&poison.color, 1, 0, 0, 1);
+int main (void) {
+    pxZeroBox(&character);
+    pxZeroBox(&food);
+    pxZeroBox(&poison);
 
-     character.texture = 0;
-     food.texture = 0;
-     poison.texture = 0;
+    pxSetColor(&character.color, 0, 0, 1, 1);
+    pxSetColor(&food.color, 0, 1, 0, 1);
+    pxSetColor(&poison.color, 1, 0, 0, 1);
 
-     pxSetBoxDims(&character, 0, 0, 0.7, 0.7);
-     pxSetBoxDims(&food, -0.5, -0.5, 0.1, 0.1);
-     pxSetBoxDims(&poison, 0.5, 0.5, 0.1, 0.1);
+    pxSetBoxSize(&character, 0.7, 0.7);
+    pxSetBoxSize(&food, 0.1, 0.1);
+    pxSetBoxSize(&poison, 0.1, 0.1);
 
-     pxSetColor(pxBackgroundColor(), 1, 1, 1, 1);
-     pxRendererInit();
-     pxTimerInit();
-     while (!pxGetReqt(PX_REQT_EXIT)) {
-         pxInputCycle();
-         pxTimerCycle(NULL);
-         pxNewFrame();
-         pxDrawBox(&character);
-         pxDrawBox(&food);
-         pxDrawBox(&poison);
-     }
- }
+    pxSetColor(pxBackgroundColor(), 1, 1, 1, 1);
+    pxRendererInit();
+    pxTimerInit();
+
+    reset();
+    while (!pxGetReqt(PX_REQT_EXIT)) {
+        pxInputCycle();
+        pxTimerCycle(ttl_array);
+
+        pxGetMouse(&character.x, &character.y);
+
+        if ((fabsf(food.x - character.x) < character.w / 2.)
+            && (fabsf(food.y - character.y) < character.h / 2.))
+        {
+            reset();
+            score++;
+        }
+
+        pxNewFrame();
+        pxDrawBox(&character);
+        pxDrawBox(&food);
+        pxDrawBox(&poison);
+    }
+}

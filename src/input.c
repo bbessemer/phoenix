@@ -159,6 +159,15 @@ void pxSetKeyUp (short button) {
     keystates[button] = 0;
 }
 
+
+void pxGetMouse (float *x, float *y) {
+    int xi, yi;
+    SDL_GetMouseState(&xi, &yi);
+    *x = xi / (float) window_size_w;
+    *y = yi / (float) window_size_h;
+    pxScreentoWorld(x, y);
+}
+
 void pxInputCycle ()
 {
     pxPollEvents();
