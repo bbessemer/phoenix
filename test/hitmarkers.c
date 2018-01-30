@@ -18,22 +18,11 @@
  * PURPOSE OF PARODY, AND OTHER STRICTLY NON-COMMERCIAL PURPOSES.
  */
 
-#include <phoenix/pse.h>
+#define PX_USE_GL
 
-// MLG #defines
-#define NOSCOPE 360.0
-#define reload() srand(SDL_GetPerformanceCounter())
+#include <phoenix/phoenix.h>
 
-namespace mlg {
-
-// Textures
-px::Texture
-four[20],   // Snoop Dogg GIF (20 frames)
-hitmarker_tex,
-meme_texes[13],
-fashion_texes[44];
-
-// Hitmarkers
-px::StaticContainer<px::Box2D, 69> hitmarkers;
-
+int main (void) {
+    pxRendererInit_gl();
+    while (1);
 }

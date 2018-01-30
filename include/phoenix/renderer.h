@@ -5,6 +5,11 @@
 
 #include <phoenix/box.h>
 
+#define PX_CAM_NOCHANGE 0
+#define PX_CAM_STRETCH  1
+#define PX_CAM_OVERFLOW 2
+#define PX_CAM_FIT      3
+
 void pxRefreshCamera ();
 float pxGetWindowAspect ();
 void pxSetCamera (float x, float y, float w, float h, int mode);

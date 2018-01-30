@@ -5,6 +5,8 @@
 
 #pragma once
 
+#include <stdio.h>
+
 static char px_err[256];
 
 static void pxFatal (const char *sysname, const char *msg, int line) {

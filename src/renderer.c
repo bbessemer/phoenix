@@ -9,6 +9,9 @@ float cam_center_x, cam_center_y;
 float cam_size_w, cam_size_h;
 int cam_mode;
 
+float camera_matrix[4][4];
+unsigned int window_size_w, window_size_h;
+
 void pxRefreshCamera () {
     pxSetCamera(cam_center_x, cam_center_y, cam_size_w, cam_size_h,
         PX_CAM_NOCHANGE);

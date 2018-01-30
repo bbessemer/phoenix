@@ -2,4 +2,5 @@
 *.bc
 *.a
 *.exe
+a.out
 target/
