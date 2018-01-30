@@ -13,6 +13,10 @@ float camera_matrix[4][4];
 unsigned int window_size_w = 1024;
 unsigned int window_size_h = 768;
 
+px_color_t px_background_color = {0, 0, 0, 1};
+
+px_color_t *pxBackgroundColor () { return &px_background_color; }
+
 void pxRefreshCamera () {
     pxSetCamera(cam_center_x, cam_center_y, cam_size_w, cam_size_h,
         PX_CAM_NOCHANGE);

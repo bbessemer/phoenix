@@ -51,6 +51,7 @@ extern const GLfloat pxTCBuf_Box[];
 
 extern float camera_matrix[4][4];
 extern unsigned int window_size_w, window_size_h;
+extern px_color_t px_background_color;
 
 #define index_vbo_vert  0
 #define index_vbo_txc   1
@@ -244,7 +245,7 @@ void pxRendererInit_gl () {
     gl_context = gl_ctx;
 }
 
-void pxDrawBoxes_gl (px_box_t *boxes, size_t n_boxes) {
+void pxNewFrame_gl () {
     swap_buffers(window);
 
     // Test for size change.
@@ -255,13 +256,16 @@ void pxDrawBoxes_gl (px_box_t *boxes, size_t n_boxes) {
     }
 
     // Reset everything.
-    glClearColor(0, 0, 0, 1);
+    glClearColor(px_background_color.r, px_background_color.g,
+        px_background_color.b, px_background_color.a);
     glClear(GL_COLOR_BUFFER_BIT);
     glDisable(GL_DEPTH_TEST);
 
     // Camera matrix is easy; it's common to all boxes.
     glUniformMatrix4fv(color_unifs.camera, 1, GL_FALSE, &camera_matrix[0][0]);
+}
 
+void pxDrawBoxes_gl (px_box_t *boxes, size_t n_boxes) {
     px_box_t * const end = boxes + n_boxes;
     for (px_box_t *box = boxes; box < end; box++)
         pxDrawBox_gl(box);
