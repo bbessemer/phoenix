@@ -161,6 +161,8 @@ void pxSetKeyUp (short button) {
 
 void pxInputCycle ()
 {
+    pxPollEvents();
+
     for (int i = 0; i < NUMKEYS; i++)
     {
         if (keystates[i])

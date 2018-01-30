@@ -49,3 +49,5 @@ void pxProcessKeyEvent (SDL_Event *event);
 void pxSetKeyDown (short button, short modifiers);
 void pxSetKeyUp (short button);
 px_keybind_t *pxGetKeybind (Uint32 button, Uint16 modifiers);
+
+void pxInputCycle ();
