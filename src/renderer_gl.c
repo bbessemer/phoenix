@@ -4,11 +4,14 @@
  */
 
 #define PX_COMPILE_GL
+#define _GNU_SOURCE
 
+#include <stdio.h>
 #include <glad/glad.h>
 #include <SDL2/SDL.h>
 #include <phoenix/renderer.h>
 #include <phoenix/request.h>
+#include <phoenix/error.h>
 
 SDL_Window *window;
 SDL_GLContext gl_context;
@@ -242,7 +245,7 @@ void pxDrawBoxes_gl (px_box_t *boxes, size_t n_boxes) {
     if (pxGetReqt(PX_REQT_RESIZE))
     {
         glViewport(0, 0, window_size_w, window_size_h);
-        refreshCamera();
+        pxRefreshCamera();
     }
 
     // Reset everything.
