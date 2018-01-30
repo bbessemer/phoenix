@@ -3,7 +3,7 @@
  * All rights reserved.
  */
 
-#include <memset.h>
+#include <string.h>
 #include <phoenix/renderer.h>
 
 float cam_center_x = 0, cam_center_y = 0;
