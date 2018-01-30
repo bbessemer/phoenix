@@ -59,8 +59,8 @@ int main (void) {
         }
 
         pxNewFrame();
-        pxDrawBox(&character);
         pxDrawBox(&food);
         pxDrawBox(&poison);
+        pxDrawBox(&character);
     }
 }
