@@ -3,6 +3,8 @@
  * All rights reserved.
  */
 
+#pragma once
+
 #include <phoenix/box.h>
 
 #define PX_CAM_NOCHANGE 0
