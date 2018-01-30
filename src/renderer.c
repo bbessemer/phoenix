@@ -10,7 +10,8 @@ float cam_size_w, cam_size_h;
 int cam_mode;
 
 float camera_matrix[4][4];
-unsigned int window_size_w, window_size_h;
+unsigned int window_size_w = 1024;
+unsigned int window_size_h = 768;
 
 void pxRefreshCamera () {
     pxSetCamera(cam_center_x, cam_center_y, cam_size_w, cam_size_h,
