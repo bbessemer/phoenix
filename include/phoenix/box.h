@@ -9,8 +9,8 @@
 #include "color.h"
 
 struct px_rotation {
-    float cx, cy;
     float cos, sin;
+    float cx, cy;
 };
 
 struct px_box {
