@@ -4,5 +4,6 @@
 #include "color.h"
 #include "error.h"
 #include "renderer.h"
-#include "request.h"
+#include "input.h"
 #include "texture.h"
+#include "timer.h"

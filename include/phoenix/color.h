@@ -7,11 +7,9 @@
 
 #include <stdint.h>
 
-struct px_color {
+typedef struct px_color {
     float r, g, b, a;
-};
-
-typedef struct px_color px_color_t;
+} px_color_t;
 
 void pxSetColor_RGBAf (px_color_t *color, float r, float g, float b, float a);
 void pxSetColor_RGBAi (px_color_t *color, uint8_t r, uint8_t g, uint8_t b,

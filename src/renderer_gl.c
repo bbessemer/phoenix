@@ -16,7 +16,7 @@
 
 #include <SDL2/SDL.h>
 #include <phoenix/renderer.h>
-#include <phoenix/request.h>
+#include <phoenix/input.h>
 #include <phoenix/error.h>
 
 SDL_Window *window;
