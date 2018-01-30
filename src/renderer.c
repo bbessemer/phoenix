@@ -3,11 +3,12 @@
  * All rights reserved.
  */
 
+#include <memset.h>
 #include <phoenix/renderer.h>
 
-float cam_center_x, cam_center_y;
-float cam_size_w, cam_size_h;
-int cam_mode;
+float cam_center_x = 0, cam_center_y = 0;
+float cam_size_w = 2, cam_size_h = 2;
+int cam_mode = PX_CAM_FIT;
 
 float camera_matrix[4][4];
 unsigned int window_size_w = 1024;
@@ -16,6 +17,12 @@ unsigned int window_size_h = 768;
 px_color_t px_background_color = {0, 0, 0, 1};
 
 px_color_t *pxBackgroundColor () { return &px_background_color; }
+
+void pxRendererInit () {
+    memset(&camera_matrix[0][1], 0, sizeof(float) * 14);
+    camera_matrix[3][3] = 1.f;
+    pxRefreshCamera();
+}
 
 void pxRefreshCamera () {
     pxSetCamera(cam_center_x, cam_center_y, cam_size_w, cam_size_h,

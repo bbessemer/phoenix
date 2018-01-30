@@ -198,6 +198,8 @@ static int init_shader_progs (void)
 }
 
 void pxRendererInit_gl () {
+    pxRendererInit();
+
     SDL_Window *win;
     SDL_GLContext gl_ctx;
 

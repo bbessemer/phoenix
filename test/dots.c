@@ -11,6 +11,24 @@
  #include <phoenix/phoenix.h>
 
  int main (void) {
+     px_box_t character, food, poison;
+
+     pxZeroBox(&character);
+     pxZeroBox(&food);
+     pxZeroBox(&poison);
+
+     pxSetColor(&character.color, 0, 0, 1, 1);
+     pxSetColor(&food.color, 0, 1, 0, 1);
+     pxSetColor(&poison.color, 1, 0, 0, 1);
+
+     character.texture = 0;
+     food.texture = 0;
+     poison.texture = 0;
+
+     pxSetBoxDims(&character, 0, 0, 0.7, 0.7);
+     pxSetBoxDims(&food, -0.5, -0.5, 0.1, 0.1);
+     pxSetBoxDims(&poison, 0.5, 0.5, 0.1, 0.1);
+
      pxSetColor(pxBackgroundColor(), 1, 1, 1, 1);
      pxRendererInit();
      pxTimerInit();
@@ -18,5 +36,8 @@
          pxInputCycle();
          pxTimerCycle(NULL);
          pxNewFrame();
+         pxDrawBox(&character);
+         pxDrawBox(&food);
+         pxDrawBox(&poison);
      }
  }

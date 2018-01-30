@@ -24,6 +24,8 @@ struct px_box {
 typedef struct px_box px_box_t;
 typedef struct px_rotation px_rotation_t;
 
+void pxZeroBox(px_box_t *box);
+
 void pxSetBoxDims (px_box_t *box, float x, float y, float w, float h);
 void pxSetBoxSize (px_box_t *box, float w, float h);
 void pxSetBoxPos (px_box_t *box, float x, float y);

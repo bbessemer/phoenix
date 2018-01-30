@@ -3,9 +3,14 @@
  * All rights reserved.
  */
 
+#include <string.h>
 #include <math.h>
 #include <phoenix/box.h>
 
+void pxZeroBox(px_box_t *box) {
+    memset(box, 0, sizeof(*box));
+    box->rotation.cos = 1;
+}
 
 void pxSetBoxDims (px_box_t *box, float x, float y, float w, float h) {
     box->x = x;
