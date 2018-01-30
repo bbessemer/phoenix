@@ -24,3 +24,11 @@ void pxDrawBoxes_gl (px_box_t *boxes, size_t n_boxes);
 void pxDrawBox_gl (px_box_t *box);
 
 #endif
+
+#ifdef PX_USE_GL
+
+#define pxRendererInit  pxRendererInit_gl
+#define pxDrawBoxes     pxDrawBoxes_gl
+#define pxDrawBox       pxDrawBox_gl
+
+#endif
