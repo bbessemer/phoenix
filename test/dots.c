@@ -106,6 +106,7 @@ int main ()
 
     pxSetColor(pxBackgroundColor(), 1, 1, 1, 1);
     pxTimerInit();
+    SDL_GL_SetSwapInterval(1); // Turn on vsync so as to not murder my battery
 
     OnEatPoison(); // starts new game
 
