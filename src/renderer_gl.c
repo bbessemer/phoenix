@@ -9,7 +9,7 @@
 #include <stdio.h>
 
 #ifdef __APPLE__
-#include <OpenGL/gl.h>
+#include <GL/glew.h>
 #else
 #include <glad/glad.h>
 #endif
@@ -79,6 +79,8 @@ init_static_vbo (GLuint index, GLfloat* buf, size_t len, GLuint* dest)
 
 static int init_vaos (void)
 {
+    if (glGenVertexArrays == NULL)
+        pxFatal("2D_GLRenderer", "glGenVertexArrays not found", __LINE__);
     glGenVertexArrays(1, &vao);
     if (!vao)
     {
@@ -215,7 +217,10 @@ void pxRendererInit_gl () {
         pxFatal("2D_GLRenderer", "Could not create GL context", __LINE__);
     }
 
-#ifndef __APPLE__
+#ifdef __APPLE__
+    glewExperimental = GL_TRUE;
+    glewInit();
+#else
     if (!gladLoadGL())
     {
         SDL_GL_DeleteContext(gl_ctx);
