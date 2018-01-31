@@ -42,7 +42,7 @@ void pxTimerInit () {
     last_step = SDL_GetPerformanceCounter();
 }
 
-void pxTimerCycle (float **to_decrement) {
+void pxTimerCycle (float *to_decrement, size_t n) {
     Uint64 now = SDL_GetPerformanceCounter();
     delta = (now - last_step) * perf_int;
     game_time += delta;
@@ -52,9 +52,7 @@ void pxTimerCycle (float **to_decrement) {
     if (fps_interval) if (frame_count % fps_interval == 0)
         fpsStep();
 
-    if (to_decrement) {
-        for (; *to_decrement; to_decrement++) {
-            **to_decrement -= delta;
-        }
+    for (size_t i = 0; i < n; i++) {
+        to_decrement[i] -= delta;
     }
 }

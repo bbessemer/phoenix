@@ -5,9 +5,11 @@
 
 #pragma once
 
+#include <SDL2/SDL.h>
+
 float pxGetDelta ();
 Uint64 pxGetFrameCount ();
 double pxGetGameTime ();
 
 void pxTimerInit ();
-void pxTimerCycle ();
+void pxTimerCycle (float *, size_t);

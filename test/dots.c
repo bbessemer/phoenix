@@ -15,7 +15,6 @@
 #define ROUND_TIME 1.6
 static px_box_t character, food, poison;
 static float ttl;
-static float *ttl_array[] = {&ttl, NULL};
 static int score;
 
 void reset () {
@@ -47,7 +46,7 @@ int main (void) {
     reset();
     while (!pxGetReqt(PX_REQT_EXIT)) {
         pxInputCycle();
-        pxTimerCycle(ttl_array);
+        pxTimerCycle(&ttl, 1);
 
         pxGetMouse(&character.x, &character.y);
 
