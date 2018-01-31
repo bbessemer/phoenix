@@ -11,6 +11,11 @@ typedef struct px_color {
     float r, g, b, a;
 } px_color_t;
 
+#pragma pack(1)
+typedef struct px_icolor {
+    uint8_t r, g, b, a;
+} px_icolor_t;
+
 void pxSetColor_RGBAf (px_color_t *color, float r, float g, float b, float a);
 void pxSetColor_RGBAi (px_color_t *color, uint8_t r, uint8_t g, uint8_t b,
         uint8_t a);
