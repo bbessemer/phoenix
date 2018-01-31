@@ -17,16 +17,48 @@ static px_box_t character, food, poison;
 static float ttl;
 static int score;
 
-void reset () {
+void NewPositions () {
     ttl = ROUND_TIME;
-    srand(time(NULL));
+
     pxSetBoxPos(&food, rand() / (float) RAND_MAX * 1.5f - 1.f,
         rand() / (float) RAND_MAX * 1.5f - 1.f);
     pxSetBoxPos(&poison, rand() / (float) RAND_MAX * 1.5 - 1.f,
         rand() / (float) RAND_MAX * 1.5f - 1.f);
 }
 
-int main (void) {
+void OnEatFood () {
+    score++;
+    NewPositions();
+}
+
+void OnEatPoison () {
+    ttl = ROUND_TIME;
+    NewPositions();
+}
+
+char RectCheck (px_box_t* box0, px_box_t* box1, void (*oncollide) ()) {
+    float max_x = (box0->w + box1->w) * 0.5f;
+    float diff_x = fabsf(box0->x - box1->x);
+    if (diff_x >= max_x) return 0;
+
+    float max_y = (box0->h + box1->h) * 0.5f;
+    float diff_y = fabsf(box0->y - box1->y);
+    if (diff_y >= max_y) return 0;
+
+    oncollide();
+    return 1;
+}
+
+void WambaCheck ()
+{
+    if (RectCheck(&character,&food,OnEatFood)) return;
+    RectCheck(&character,&poison,OnEatPoison);
+}
+
+int main ()
+{
+	srand(time(NULL));
+
     pxZeroBox(&character);
     pxZeroBox(&food);
     pxZeroBox(&poison);
@@ -43,19 +75,15 @@ int main (void) {
     pxRendererInit();
     pxTimerInit();
 
-    reset();
+    OnEatPoison(); // starts new game
+
     while (!pxGetReqt(PX_REQT_EXIT)) {
         pxInputCycle();
         pxTimerCycle(&ttl, 1);
 
         pxGetMouse(&character.x, &character.y);
 
-        if ((fabsf(food.x - character.x) < character.w / 2.f)
-            && (fabsf(food.y - character.y) < character.h / 2.f))
-        {
-            reset();
-            score++;
-        }
+        WambaCheck();
 
         pxNewFrame();
         pxDrawBox(&food);
