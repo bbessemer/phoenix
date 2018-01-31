@@ -21,10 +21,10 @@ static int score;
 void reset () {
     ttl = ROUND_TIME;
     srand(time(NULL));
-    pxSetBoxPos(&food, rand() / (float) RAND_MAX * 1.5 - 1,
-        rand() / (float) RAND_MAX * 1.5 - 1);
-    pxSetBoxPos(&poison, rand() / (float) RAND_MAX * 1.5 - 1,
-        rand() / (float) RAND_MAX * 1.5 - 1);
+    pxSetBoxPos(&food, rand() / (float) RAND_MAX * 1.5f - 1.f,
+        rand() / (float) RAND_MAX * 1.5f - 1.f);
+    pxSetBoxPos(&poison, rand() / (float) RAND_MAX * 1.5 - 1.f,
+        rand() / (float) RAND_MAX * 1.5f - 1.f);
 }
 
 int main (void) {
@@ -51,8 +51,8 @@ int main (void) {
 
         pxGetMouse(&character.x, &character.y);
 
-        if ((fabsf(food.x - character.x) < character.w / 2.)
-            && (fabsf(food.y - character.y) < character.h / 2.))
+        if ((fabsf(food.x - character.x) < character.w / 2.f)
+            && (fabsf(food.y - character.y) < character.h / 2.f))
         {
             reset();
             score++;
