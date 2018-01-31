@@ -43,26 +43,6 @@ static px_box_t character, food, poison;
 static float ttl;
 static int score;
 
-void NewPositions () {
-    ttl = ROUND_TIME;
-
-    pxSetBoxPos(&food, rand() / (float) RAND_MAX * 1.5f - 1.f,
-        rand() / (float) RAND_MAX * 1.5f - 1.f);
-    pxSetBoxPos(&poison, rand() / (float) RAND_MAX * 1.5 - 1.f,
-        rand() / (float) RAND_MAX * 1.5f - 1.f);
-    pxSetBoxSize(&character, 0.3 + score * 0.04, 0.3 + score * 0.04);
-}
-
-void OnEatFood () {
-    score++;
-    NewPositions();
-}
-
-void OnEatPoison () {
-    score = 0;
-    NewPositions();
-}
-
 char RectCheck (px_box_t* box0, px_box_t* box1, void (*oncollide) ()) {
     float max_x = (box0->w + box1->w) * 0.5f;
     float diff_x = fabsf(box0->x - box1->x);
@@ -76,10 +56,34 @@ char RectCheck (px_box_t* box0, px_box_t* box1, void (*oncollide) ()) {
     return 1;
 }
 
+void NewPositions () {
+    ttl = ROUND_TIME;
+
+    pxSetBoxPos(&food, rand() / (float) RAND_MAX * 1.5f - 1.f,
+        rand() / (float) RAND_MAX * 1.5f - 1.f);
+    pxSetBoxPos(&poison, rand() / (float) RAND_MAX * 1.5 - 1.f,
+        rand() / (float) RAND_MAX * 1.5f - 1.f);
+    pxSetBoxSize(&character, 0.3 + score * 0.04, 0.3 + score * 0.04);
+
+    RectCheck(&character, &food, NewPositions);
+    RectCheck(&character, &poison, NewPositions);
+}
+
+void OnEatFood () {
+    score++;
+    NewPositions();
+}
+
+void OnEatPoison () {
+    score = 0;
+    NewPositions();
+}
+
 void WambaCheck ()
 {
     if (RectCheck(&character,&food,OnEatFood)) return;
     RectCheck(&character,&poison,OnEatPoison);
+    if (ttl < 0) OnEatPoison();
 }
 
 int main ()
