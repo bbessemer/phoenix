@@ -4,3 +4,5 @@
 *.exe
 a.out
 target/
+.DS_Store
+*.dSYM/
