@@ -50,6 +50,7 @@ void NewPositions () {
         rand() / (float) RAND_MAX * 1.5f - 1.f);
     pxSetBoxPos(&poison, rand() / (float) RAND_MAX * 1.5 - 1.f,
         rand() / (float) RAND_MAX * 1.5f - 1.f);
+    pxSetBoxSize(&character, 0.3 + score * 0.02, 0.3 + score * 0.02);
 }
 
 void OnEatFood () {
@@ -58,7 +59,7 @@ void OnEatFood () {
 }
 
 void OnEatPoison () {
-    ttl = ROUND_TIME;
+    score = 0;
     NewPositions();
 }
 
@@ -93,7 +94,6 @@ int main ()
     pxSetColor(&food.color, 0, 1, 0, 1);
     pxSetColor(&poison.color, 1, 0, 0, 1);
 
-    pxSetBoxSize(&character, 0.7, 0.7);
     pxSetBoxSize(&food, 0.1, 0.1);
     pxSetBoxSize(&poison, 0.1, 0.1);
 
