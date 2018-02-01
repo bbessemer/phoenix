@@ -36,3 +36,8 @@ px_tex_t pxMakeTexture_Raw_gl (unsigned int w, unsigned int h,
 
     return tex_id;
 }
+
+px_tex_t pxRemakeTexture_gl (px_tex_t old, px_image_t *new_img) {
+    glDeleteTextures(1, &old);
+    return pxMakeTexture_gl(new_img);
+}

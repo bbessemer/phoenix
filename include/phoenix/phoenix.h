@@ -7,5 +7,7 @@
 #include "input.h"
 #include "texture.h"
 #include "timer.h"
+#include "font.h"
+#include "audio.h"
 
 #define SDL_main main

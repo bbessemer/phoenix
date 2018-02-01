@@ -17,7 +17,7 @@ void pxMakeBitmapFont (px_bmpfont_t *font, px_image_t *image,
         font->chars[255] = 0;
         len = 256;
     }
-    memcpy(font + 1, image + 1, char_h * image->w * len);
+    memcpy(font + 1, image + 1, char_h * image->w * len * sizeof(px_icolor_t));
 }
 
 extern struct {} px_dflt_font_img;
@@ -38,8 +38,16 @@ void pxDrawBitmapChar (px_image_t *out, const px_bmpfont_t *font,
         break;
     }
     for (int j = 0; j < font->char_h; j++) {
-        memcpy(img_data + (j * out->w) + (i * font->char_w),
-            font_data + (char_i * font->char_h * font->char_w)
-            + (j * font->char_w), font->char_w * sizeof(px_icolor_t));
+        memcpy(&img_data[j * out->w + i * font->char_w],
+            &font_data[font->char_w * (char_i * font->char_h + j)],
+            font->char_w * sizeof(px_icolor_t));
     }
+}
+
+void pxRenderTextBitmap (px_image_t *out, const px_bmpfont_t *font,
+    const char *string)
+{
+    memset(out + 1, 0, out->h * out->w * sizeof(px_icolor_t));
+    for (int i = 0; *string; string++, i++)
+        pxDrawBitmapChar(out, font, i, *string);
 }

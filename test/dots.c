@@ -43,6 +43,27 @@ static px_box_t character, food, poison;
 static float ttl;
 static int score;
 
+#pragma pack(1)
+static struct {
+    px_bmpfont_t font;
+    px_icolor_t data[320][5];
+} default_font;
+
+#pragma pack(1)
+static struct {
+    px_image_t header;
+    px_icolor_t data[5][15];
+} score_tex;
+
+static px_box_t score_disp;
+
+void RedrawScore () {
+    char score_str[4];
+    snprintf(score_str, 3, "%d", score);
+    pxRenderTextBitmap(&score_tex.header, &default_font.font, score_str);
+    score_disp.texture = pxMakeTexture_gl(&score_tex.header);
+}
+
 char RectCheck (px_box_t* box0, px_box_t* box1, void (*oncollide) ()) {
     float max_x = (box0->w + box1->w) * 0.5f;
     float diff_x = fabsf(box0->x - box1->x);
@@ -72,18 +93,20 @@ void NewPositions () {
 void OnEatFood () {
     score++;
     NewPositions();
+    RedrawScore();
 }
 
 void OnEatPoison () {
     score = 0;
     NewPositions();
+    RedrawScore();
 }
 
 void WambaCheck ()
 {
     if (RectCheck(&character,&food,OnEatFood)) return;
     RectCheck(&character,&poison,OnEatPoison);
-    if (ttl < 0) OnEatPoison();
+    if (ttl < 0 && score) OnEatPoison();
 }
 
 int main ()
@@ -93,7 +116,9 @@ int main ()
     pxZeroBox(&character);
     pxZeroBox(&food);
     pxZeroBox(&poison);
+    pxZeroBox(&score_disp);
     MakeTextures();
+    pxMakeDefaultFont(&default_font.font);
 
     pxRendererInit();
 
@@ -101,8 +126,11 @@ int main ()
     food.texture = pxMakeTexture_Raw_gl(6, 6, (px_icolor_t *)food_tex);
     poison.texture = pxMakeTexture_Raw_gl(6, 6, (px_icolor_t *)poison_tex);
 
+    score_tex.header = (px_image_t){.w = 15, .h = 5};
+
     pxSetBoxSize(&food, 0.1, 0.1);
     pxSetBoxSize(&poison, 0.1, 0.1);
+    pxSetBoxDims(&score_disp, 0.9, -0.9, 0.45, 0.15);
 
     pxSetColor(pxBackgroundColor(), 1, 1, 1, 1);
     pxTimerInit();
@@ -122,5 +150,6 @@ int main ()
         pxDrawBox(&food);
         pxDrawBox(&poison);
         pxDrawBox(&character);
+        pxDrawBox(&score_disp);
     }
 }
