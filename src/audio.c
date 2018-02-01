@@ -5,7 +5,7 @@
 
 #include <phoenix/audio.h>
 
-void pxGetSoundSamples_u16 (unsigned short *dest, px_sound_t *sound,
+void pxGetSoundSamples (unsigned short *dest, px_sound_t *sound,
     int out_samplerate, int out_ch, int samples)
 {
     unsigned int in_sr = sound->src->samplerate;
