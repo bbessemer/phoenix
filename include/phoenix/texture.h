@@ -1,3 +1,8 @@
+/*
+ * Copyright (C) 2017-2018 Brent Bessemer.
+ * All rights reserved.
+ */
+
 #pragma once
 
 #include "color.h"
