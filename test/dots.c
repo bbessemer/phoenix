@@ -55,13 +55,29 @@ static struct {
     px_icolor_t data[5][15];
 } score_tex;
 
+#pragma pack(1)
+static struct {
+    px_image_t header;
+    px_icolor_t data[5][20];
+} fps_tex;
+
 static px_box_t score_disp;
+static px_box_t fps_disp;
 
 void RedrawScore () {
     char score_str[4];
     snprintf(score_str, 3, "%d", score);
     pxRenderTextBitmap(&score_tex.header, &default_font.font, score_str);
-    score_disp.texture = pxMakeTexture_gl(&score_tex.header);
+    score_disp.texture = pxRemakeTexture_gl(score_disp.texture,
+        &score_tex.header);
+}
+
+void RedrawFPS (float fps) {
+    if (fps > 10000) fps = 9999;
+    char fps_string[5];
+    snprintf(fps_string, 5, "%d", (int) fps);
+    pxRenderTextBitmap(&fps_tex.header, &default_font.font, fps_string);
+    fps_disp.texture = pxRemakeTexture_gl(fps_disp.texture, &fps_tex.header);
 }
 
 char RectCheck (px_box_t* box0, px_box_t* box1, void (*oncollide) ()) {
@@ -117,6 +133,8 @@ int main ()
     pxZeroBox(&food);
     pxZeroBox(&poison);
     pxZeroBox(&score_disp);
+    pxZeroBox(&fps_disp);
+
     MakeTextures();
     pxMakeDefaultFont(&default_font.font);
 
@@ -127,14 +145,17 @@ int main ()
     poison.texture = pxMakeTexture_Raw_gl(6, 6, (px_icolor_t *)poison_tex);
 
     score_tex.header = (px_image_t){.w = 15, .h = 5};
+    fps_tex.header = (px_image_t){.w = 20, .h = 5};
 
     pxSetBoxSize(&food, 0.1, 0.1);
     pxSetBoxSize(&poison, 0.1, 0.1);
     pxSetBoxDims(&score_disp, 0.9, -0.9, 0.45, 0.15);
+    pxSetBoxDims(&fps_disp, 0.9, 0.9, 0.4, 0.1);
 
     pxSetColor(pxBackgroundColor(), 1, 1, 1, 1);
     pxTimerInit();
-    SDL_GL_SetSwapInterval(1); // Turn on vsync so as to not murder my battery
+    //SDL_GL_SetSwapInterval(1); // Turn on vsync so as to not murder my battery
+    pxCountFPS(RedrawFPS, 1000);
 
     OnEatPoison(); // starts new game
 
@@ -151,5 +172,6 @@ int main ()
         pxDrawBox(&poison);
         pxDrawBox(&character);
         pxDrawBox(&score_disp);
+        pxDrawBox(&fps_disp);
     }
 }

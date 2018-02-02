@@ -28,11 +28,11 @@ void pxCountFPS (void (*callback) (float), unsigned int every) {
 static void fpsStep ()
 {
     float frames = (float)(frame_count - fps_last);
-    float time = game_time - fps_last_time;
+    float t = game_time - fps_last_time;
     fps_last = frame_count;
     fps_last_time = game_time;
     if (fpsCallback)
-        fpsCallback(frames / time);
+        fpsCallback(frames / t);
 }
 
 void pxTimerInit () {

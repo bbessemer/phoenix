@@ -10,6 +10,7 @@
 float pxGetDelta ();
 Uint64 pxGetFrameCount ();
 double pxGetGameTime ();
+void pxCountFPS (void (*callback) (float), unsigned int every);
 
 void pxTimerInit ();
 void pxTimerCycle (float *, size_t);
