@@ -20,13 +20,6 @@ void pxMakeBitmapFont (px_bmpfont_t *font, px_image_t *image,
     memcpy(font + 1, image + 1, char_h * image->w * len * sizeof(px_icolor_t));
 }
 
-extern struct {} px_dflt_font_img;
-
-void pxMakeDefaultFont (px_bmpfont_t *font) {
-    pxMakeBitmapFont(font, (px_image_t *) &px_dflt_font_img,
-        "ABCDEFGHIJKLMNOPQRSTUVWZYZabcdefghijklmnopqrstuvwzyz0123456789-", 5);
-}
-
 void pxDrawBitmapChar (px_image_t *out, const px_bmpfont_t *font,
     const size_t i, char c)
 {

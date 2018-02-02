@@ -45,12 +45,6 @@ static int score;
 
 #pragma pack(1)
 static struct {
-    px_bmpfont_t font;
-    px_icolor_t data[320][5];
-} default_font;
-
-#pragma pack(1)
-static struct {
     px_image_t header;
     px_icolor_t data[5][15];
 } score_tex;
@@ -67,7 +61,7 @@ static px_box_t fps_disp;
 void RedrawScore () {
     char score_str[4];
     snprintf(score_str, 3, "%d", score);
-    pxRenderTextBitmap(&score_tex.header, &default_font.font, score_str);
+    pxRenderTextBitmap(&score_tex.header, &px_default_font, score_str);
     score_disp.texture = pxRemakeTexture_gl(score_disp.texture,
         &score_tex.header);
 }
@@ -76,7 +70,7 @@ void RedrawFPS (float fps) {
     if (fps > 10000) fps = 9999;
     char fps_string[5];
     snprintf(fps_string, 5, "%d", (int) fps);
-    pxRenderTextBitmap(&fps_tex.header, &default_font.font, fps_string);
+    pxRenderTextBitmap(&fps_tex.header, &px_default_font, fps_string);
     fps_disp.texture = pxRemakeTexture_gl(fps_disp.texture, &fps_tex.header);
 }
 
@@ -136,7 +130,6 @@ int main ()
     pxZeroBox(&fps_disp);
 
     MakeTextures();
-    pxMakeDefaultFont(&default_font.font);
 
     pxRendererInit();
 
