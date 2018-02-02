@@ -100,7 +100,7 @@ void NewPositions () {
         rand() / (float) RAND_MAX * 1.5f - 1.f);
     pxSetBoxPos(&poison, rand() / (float) RAND_MAX * 1.5 - 1.f,
         rand() / (float) RAND_MAX * 1.5f - 1.f);
-    pxSetBoxSize(&character, 0.3 + score * 0.04, 0.3 + score * 0.04);
+    pxSetBoxSize(&character, 0.2 + score * 0.03, 0.2 + score * 0.03);
 
     RectCheck(&character, &food, NewPositions);
     RectCheck(&character, &poison, NewPositions);
