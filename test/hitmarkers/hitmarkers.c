@@ -24,9 +24,12 @@
 #include <stdio.h>
 #include <math.h>
 #include <phoenix/phoenix.h>
+#include <phoenix/imgfile.h>
+
 #include "memepaths.h"
 
-#define DEGREES (M_PI / 180.)
+#define DEGREES (M_PI / 180.f)
+#define BEAT    (60.f / 110.f)
 
 extern px_image_t hitmarker_image;
 
@@ -37,6 +40,11 @@ static px_tex_t four[20];   // Snoop Dogg GIF (20 frames)
 static px_box_t hitmarkers[69];
 static px_box_t snoop;
 
+static float snoop_aratio;
+
+#define N_TTLS  1
+static float ttls[N_TTLS];
+
 void tick ();
 
 void PrintFPS (float fps) {
@@ -45,7 +53,18 @@ void PrintFPS (float fps) {
 
 void PrepareTextures () {
     hitmarker_tex = pxMakeTexture(&hitmarker_image);
+    px_image_t *snoop_img;
+    for (int i = 0; i < 20; i++) {
+        char snoop_path[26];
+        sprintf(snoop_path, "crap/snoops/frame_%03d.gif", i);
+        snoop_img = pxLoadImage(snoop_path);
+        if (!snoop_img) pxFatal("PrepareTextures", snoop_path, __LINE__);
+        four[i] = pxMakeTexture(snoop_img);
+    }
+    snoop_aratio = snoop_img->w / (float) snoop_img->h;
 }
+
+/// HITMARKERS
 
 static float beat_time = 0;
 static float respawn_interval = 0;
@@ -79,21 +98,42 @@ void SpinHitmarkers () {
         RespawnHitmarker(rand() % 69);
 }
 
-///////////////////////////////////////////////////////////
+/// SNOOP DOGG GIF
+
+#define TTL_SNOOP   0
+int snoop_i = 0;
+
+void SnoopNextFrame () {
+    snoop.texture = four[snoop_i++];
+    if (snoop_i >= 20) snoop_i = 0;
+    ttls[TTL_SNOOP] = 0.1337;
+}
+
+void SnoopInit () {
+    pxZeroBox(&snoop);
+    pxSetBoxDims(&snoop, 0.75f, -0.5f, snoop_aratio, 1.f);
+    SnoopNextFrame();
+}
+
+/// MAIN LOOP
 
 void tick () {
     pxInputCycle();
-    pxTimerCycle(NULL, 0);
+    pxTimerCycle(ttls, N_TTLS);
     SpinHitmarkers();
+    if (ttls[TTL_SNOOP] < 0) SnoopNextFrame();
     pxNewFrame();
     pxDrawBoxes(hitmarkers, 69);
+    pxDrawBox(&snoop);
 }
 
 int main (int argc, char **argv) {
     pxRendererInit();
     pxTimerInit();
     PrepareTextures();
-    SpawnHitmarkers();
     pxCountFPS(PrintFPS, 1000);
+    SpawnHitmarkers();
+    SnoopInit();
     while (!pxGetReqt(PX_REQT_EXIT)) tick();
+    return 0;
 }
