@@ -116,7 +116,7 @@ void WambaCheck ()
 {
     if (RectCheck(&character,&food,OnEatFood)) return;
     RectCheck(&character,&poison,OnEatPoison);
-    if (ttl < 0 && score) OnEatPoison();
+    if (ttl < 0) OnEatPoison();
 }
 
 int main ()
@@ -154,9 +154,10 @@ int main ()
 
     while (!pxGetReqt(PX_REQT_EXIT)) {
         pxInputCycle();
-        pxTimerCycle(&ttl, 1);
-
         pxGetMouse(&character.x, &character.y);
+
+        if (score) pxTimerCycle(&ttl, 1);
+        else pxTimerCycle(NULL, 0);        
 
         WambaCheck();
 
