@@ -30,7 +30,7 @@ void pxSetBoxPos (px_box_t *box, float x, float y) {
 }
 
 void pxSetRotation (px_rotation_t *rot, float theta) {
-    *rot = (px_rotation_t) {0., 0., cosf(theta), sinf(theta)};
+    *rot = (px_rotation_t) {cosf(theta), sinf(theta), 0.f, 0.f};
 }
 
 void pxStepRotation (px_rotation_t *rot, float dt) {
