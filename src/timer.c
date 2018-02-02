@@ -5,6 +5,7 @@
 
 #include <SDL2/SDL.h>
 #include <phoenix/timer.h>
+#include <phoenix/input.h>
 
 static double perf_int;
 static Uint64 last_step;
@@ -55,4 +56,8 @@ void pxTimerCycle (float *to_decrement, size_t n) {
     for (size_t i = 0; i < n; i++) {
         to_decrement[i] -= delta;
     }
+}
+
+void pxDelay (float secs, void (*frame) ()) {
+    for (; secs > 0 && !pxGetReqt(PX_REQT_EXIT); secs -= delta) frame();
 }
