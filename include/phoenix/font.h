@@ -19,5 +19,6 @@ void pxDrawBitmapChar (px_image_t *out, const px_bmpfont_t *font,
     const size_t i, char c);
 void pxRenderTextBitmap (px_image_t *out, const px_bmpfont_t *font,
     const char *string);
+px_image_t *pxRenderTextBitmap_a (const px_bmpfont_t *font, const char *string);
 
 extern px_bmpfont_t px_default_font;

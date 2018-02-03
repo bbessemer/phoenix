@@ -3,6 +3,7 @@
  * All rights reserved.
  */
 
+#include <stdlib.h>
 #include <string.h>
 #include <phoenix/font.h>
 
@@ -43,4 +44,14 @@ void pxRenderTextBitmap (px_image_t *out, const px_bmpfont_t *font,
     memset(out + 1, 0, out->h * out->w * sizeof(px_icolor_t));
     for (int i = 0; *string; string++, i++)
         pxDrawBitmapChar(out, font, i, *string);
+}
+
+px_image_t *pxRenderTextBitmap_a (const px_bmpfont_t *font, const char *string)
+{
+    unsigned int w = font->char_w * strlen(string);
+    unsigned int h = font->char_h;
+    px_image_t *out = malloc(sizeof(px_image_t) + w * h * 4);
+    *out = (px_image_t){w, h};
+    pxRenderTextBitmap(out, font, string);
+    return out;
 }
