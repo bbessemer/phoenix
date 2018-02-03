@@ -6,3 +6,5 @@ a.out
 target/
 .DS_Store
 *.dSYM/
+callgrind.out*
+perf.data
