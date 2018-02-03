@@ -11,7 +11,6 @@ typedef struct px_color {
     float r, g, b, a;
 } px_color_t;
 
-#pragma pack(1)
 typedef struct px_icolor {
     uint8_t r, g, b, a;
 } px_icolor_t;

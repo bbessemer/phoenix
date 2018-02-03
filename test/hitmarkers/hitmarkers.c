@@ -188,10 +188,10 @@ void SpawnFashionStatement () {
     char *statement = fashion_statements[rand() % 44];
     px_color_t color;
     RandomColor(&color);
-    px_image_t *image = pxRenderTextBitmap_a(&px_default_font, statement);
+    px_image_t *image = pxRenderTextTTF(px_default_ttf, &color, statement);
 
     for (int i = 0; i < FASHION_MAX; i++) if (fashions[i].texture == 0) {
-        pxSetBoxDims(fashions + i, x, y, 0.1 * (image->w / image->h), 0.1);
+        pxSetBoxDims(fashions + i, x, y, 0.15 * (image->w / image->h), 0.15);
         pxSetRotation(&fashions[i].rotation,
             (rand() / (float) RAND_MAX - 0.5f) * M_PI / 3.f);
         fashions[i].texture = pxRemakeTexture(fashions[i].texture, image);
