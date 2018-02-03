@@ -97,3 +97,10 @@ void ShowRandomMeme (float x, float y) {
     }
 }
 ```
+
+## Statelessness
+
+> A large fraction of the flaws in software development are due to programmers
+> not fully understanding all the possible states their code may execute in.
+
+—[John Carmack](https://www.gamasutra.com/view/news/169296/Indepth_Functional_programming_in_C.php)
