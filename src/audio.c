@@ -27,29 +27,31 @@ static struct intfrac addIntfrac (const struct intfrac a,
 }
 
 static unsigned short getNthSampleFromSwag (const px_sound_src_t *src,
-    const struct intfrac n)
+    const struct intfrac n, const uint8_t ch)
 {
     const unsigned short *samples = (const unsigned short *)(src + 1);
     if (n.i < src->len - 1)
-        return samples[n.i] * n.f + samples[n.i + 1] * (1.f - n.f);
+        return samples[n.i * ch] * n.f + samples[(n.i + 1) * ch] * (1.f - n.f);
     else return 0;
 }
 
 static unsigned short getNthSampleFromSound (const px_sound_t *sound,
-    const int dest_rate, const int n)
+    const int dest_rate, const int n, const uint8_t channel)
 {
     if (sound->src->format == 420)
         return getNthSampleFromSwag(sound->src,
             addIntfrac(*(struct intfrac*) &sound->cur_sample,
-                getIntfrac(n * sound->src->samplerate / (float) dest_rate)));
+                getIntfrac(n * sound->src->samplerate / (float) dest_rate)),
+            channel % (sound->src->stereo + 1));
     else return 0;
 }
 
 static unsigned short getNthSample (const px_sound_t *sounds,
-    const size_t n_sounds, const int out_samplerate, const int n)
+    const size_t n_sounds, const int out_samplerate, const int n,
+    const uint8_t ch)
 {
     unsigned short sample = 0;
     for (int i; i < n_sounds; i++)
-        sample += getNthSampleFromSound(sounds + i, out_samplerate, n);
+        sample += getNthSampleFromSound(sounds + i, out_samplerate, n, ch);
     return sample;
 }
