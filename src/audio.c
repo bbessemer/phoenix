@@ -27,10 +27,12 @@ static struct intfrac addIntfrac (const struct intfrac a,
 }
 
 static unsigned short getNthSampleFromSwag (const px_sound_src_t *src,
-    struct intfrac n)
+    const struct intfrac n)
 {
     const unsigned short *samples = (const unsigned short *)(src + 1);
-    return samples[n.i] * n.f + samples[n.i + 1] * (1.f - n.f);
+    if (n.i < src->len - 1)
+        return samples[n.i] * n.f + samples[n.i + 1] * (1.f - n.f);
+    else return 0;
 }
 
 static unsigned short getNthSampleFromSound (const px_sound_t *sound,
