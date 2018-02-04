@@ -210,10 +210,37 @@ void KillFashionStatements () {
 /// STROBE BOXES
 
 static float strobe_time = BEAT;
+#define SB_INIT_ALPHA   0.75f
+
+void SpawnStrobeBox () {
+    const float aratio = pxGetWindowAspect();
+    const float maxlen = 3 * sqrtf(1 + aratio * aratio);
+    const float x = (rand() / (float) RAND_MAX - 0.5) * aratio;
+    const float y = (rand() / (float) RAND_MAX - 0.5);
+
+    for (int i = 0; i < STROBE_MAX; i++) if (strobes[i].color.a == 0) {
+        pxSetBoxDims(strobes + i, x, y, maxlen, 0.15);
+        pxSetRotation(&strobes[i].rotation,
+            (rand() / (float) RAND_MAX - 0.5f) * M_PI / 3.f);
+        RandomColor(&strobes[i].color);
+        strobes[i].color.a = SB_INIT_ALPHA;
+        ttls[TTL_STROBE_START + i] = 0.f;
+        return;
+    }
+}
+
+void KillStrobeBoxes () {
+    float deathtime = (strobe_time < BEAT ? 0.1337 : 0.420);
+    for (int i = 0; i < STROBE_MAX; i++) {
+        float a = SB_INIT_ALPHA * (1 + ttls[TTL_STROBE_START + i] / deathtime);
+        strobes[i].color.a = (a > 0 ? a : 0);
+    }
+}
 
 void SpawnStrobeAndFashion () {
     if (ttls[TTL_BOXSPAWN] < 0) {
         SpawnFashionStatement();
+        SpawnStrobeBox();
         ttls[TTL_BOXSPAWN] = strobe_time;
     }
 }
@@ -229,12 +256,14 @@ void tick () {
     SpawnStrobeAndFashion();
     KillMemes();
     KillFashionStatements();
+    KillStrobeBoxes();
 
     pxNewFrame();
     pxDrawBoxes(hitmarkers, 69);
     pxDrawBox(&snoop);
-    pxDrawBoxes(memes, MEME_MAX);
+    pxDrawBoxes(strobes, STROBE_MAX);
     pxDrawBoxes(fashions, FASHION_MAX);
+    pxDrawBoxes(memes, MEME_MAX);
 }
 
 int main (int argc, char **argv) {
