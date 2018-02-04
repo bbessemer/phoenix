@@ -29,19 +29,20 @@
  * application), but it can be done. Why invent a new format for anything?
  */
 
-#pragma pack(1)
+#pragma push(pack, 1)
 typedef struct px_sound_src {
     uint16_t format;        /* proprietary format code */
     uint32_t len;           /* length of the audio in samples, little-endian */
     uint32_t samplerate;    /* samples per second, little-endian */
     uint8_t stereo;         /* 0 for mono, 1 for stereo (basically (channels - 1)) */
 } __attribute__((packed)) px_sound_src_t;
+#pragma pop(pack)
 
 typedef struct px_sound {
     px_sound_src_t *src;
     size_t cur_sample;
+    float subsample;
     float pitch;
-    short volume;       /* on a scale of 0 to 1024 */
-    unsigned short cur_tick;
+    float volume;
     unsigned char fate; /* see the defines above */
 } px_sound_t;
