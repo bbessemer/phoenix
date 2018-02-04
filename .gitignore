@@ -2,6 +2,7 @@
 *.bc
 *.a
 *.exe
+*.s
 a.out
 target/
 .DS_Store
