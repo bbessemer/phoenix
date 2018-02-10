@@ -35,6 +35,7 @@ struct gl_uniforms
     GLint dims;
     GLint camera;
     GLint color;
+    GLint texid;
 };
 
 static struct gl_uniforms color_unifs;
@@ -110,6 +111,7 @@ static void init_uniforms (struct gl_uniforms *_this, GLuint program)
     _this->dims = glGetUniformLocation(program, "dims");
     _this->camera = glGetUniformLocation(program, "camera");
     _this->color = glGetUniformLocation(program, "color");
+    _this->texid = glGetUniformLocation(program, "texid");
 }
 
 static GLuint create_shader_prog (GLuint vsh, GLuint fsh)
@@ -157,24 +159,6 @@ static int init_shader_progs (void)
         free(log);
         return -1;
     }
-
-    GLuint fsh_color = glCreateShader(GL_FRAGMENT_SHADER);
-    const GLchar *fsh_src = pxShaderText_Box_FColor;
-    glShaderSource(fsh_color, 1, &fsh_src, 0);
-    glCompileShader(fsh_color);
-    glGetShaderiv(fsh_color, GL_COMPILE_STATUS, &err);
-    if (err == GL_FALSE)
-    {
-        glGetShaderiv(fsh_color, GL_INFO_LOG_LENGTH, &err);
-        log = (char *)malloc(err);
-        glGetShaderInfoLog(fsh_color, err, 0, log);
-        asprintf(&last_err, "Fragment shader could not be compiled\n\n%s", log);
-        free(log);
-        return -2;
-    }
-
-    prog_color = create_shader_prog(vsh, fsh_color);
-    init_uniforms(&color_unifs, prog_color);
 
     GLuint fsh_tex = glCreateShader(GL_FRAGMENT_SHADER);
     const GLchar *fsht_src = pxShaderText_Box_FTexture;
@@ -250,6 +234,8 @@ void pxRendererInit_gl () {
 
     window = win;
     gl_context = gl_ctx;
+
+    glUseProgram(prog_tex);
 }
 
 void pxNewFrame_gl () {
@@ -279,18 +265,11 @@ void pxDrawBoxes_gl (px_box_t *boxes, size_t n_boxes) {
 }
 
 void pxDrawBox_gl (px_box_t *box) {
-    if (box->color.a != 0)
+    if (box->texture || box->color.a != 0)
     {
-        glUseProgram(prog_color);
-        glUniform2fv(color_unifs.dims, 4, (GLfloat *) box);
-        glUniform4fv(color_unifs.color, 1, (GLfloat *) &box->color);
-        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-    }
-
-    if (box->texture)
-    {
-        glUseProgram(prog_tex);
         glUniform2fv(tex_unifs.dims, 4, (GLfloat *) box);
+        glUniform4fv(tex_unifs.color, 1, (GLfloat *) &box->color);
+        glUniform1ui(tex_unifs.texid, box->texture);
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, box->texture);
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
