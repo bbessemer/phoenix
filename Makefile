@@ -7,7 +7,7 @@
 
 AR = ar -cr
 CFLAGS = -O2
-CC = cc -c
+CC = gcc -c -g
 LD = cc
 
 INCLUDEDIR = include
