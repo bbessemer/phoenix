@@ -6,7 +6,7 @@
 #include <SDL2/SDL.h>
 #include <phoenix/audio.h>
 
-static int internal_buffer[65536];
+static unsigned int internal_buffer[65536];
 static SDL_AudioSpec px_audio_spec;
 
 static void premix (int len) {}
@@ -27,7 +27,7 @@ void pxMixAudio (void *_unused, Uint8 *buffer, int buflen)
         n_samples = buflen;
         premix(n_samples);
         for (int i = 0; i < n_samples; i++)
-            *(buffer_u8++) = ((unsigned)*(bufptr++) + 0x8000) >> 8;
+            *(buffer_u8++) = *(bufptr++) >> 8;
         break;
     }
     case AUDIO_S8:
@@ -36,7 +36,7 @@ void pxMixAudio (void *_unused, Uint8 *buffer, int buflen)
         n_samples = buflen;
         premix(n_samples);
         for (int i = 0; i < n_samples; i++)
-            *(buffer_s8++) = *(bufptr++) >> 8;
+            *(buffer_s8++) = ((signed)*(bufptr++) - 0x8000) >> 8;
         break;
     }
     case AUDIO_U16:
@@ -45,7 +45,7 @@ void pxMixAudio (void *_unused, Uint8 *buffer, int buflen)
         n_samples = (buflen >> 1);
         premix(n_samples);
         for (int i = 0; i < n_samples; i++)
-            *(buffer_u16++) = (unsigned)*(bufptr++) + 0x8000;
+            *(buffer_u16++) = *(bufptr++);
         break;
     }
     case AUDIO_S16:
@@ -54,7 +54,7 @@ void pxMixAudio (void *_unused, Uint8 *buffer, int buflen)
         n_samples = (buflen >> 1);
         premix(n_samples);
         for (int i = 0; i < n_samples; i++)
-            *(buffer_s16++) = *(bufptr++);
+            *(buffer_s16++) = (signed)*(bufptr++) - 0x8000;
         break;
     }
     case AUDIO_S32:
@@ -63,7 +63,7 @@ void pxMixAudio (void *_unused, Uint8 *buffer, int buflen)
         n_samples = (buflen >> 2);
         premix(n_samples);
         for (int i = 0; i < n_samples; i++)
-            *(buffer_s32++) = *(bufptr++) << 16;
+            *(buffer_s32++) = ((signed)*(bufptr++) - 0x8000) << 16;
         break;
     }
     case AUDIO_F32:
@@ -72,7 +72,7 @@ void pxMixAudio (void *_unused, Uint8 *buffer, int buflen)
         n_samples = (buflen >> 2);
         premix(n_samples);
         for (int i = 0; i < n_samples; i++)
-            *(buffer_f32++) = *(bufptr++) / 32768.0;
+            *(buffer_f32++) = ((signed)*(bufptr++) - 0x8000) / 32768.0;
         break;
     }}
 }
