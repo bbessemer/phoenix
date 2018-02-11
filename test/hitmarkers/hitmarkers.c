@@ -150,7 +150,6 @@ void ShowRandomMeme (float x, float y) {
 }
 
 void OnSpray () {
-    puts("Spawn");
     float x, y;
     pxGetMouse(&x, &y);
     x += 0.64 * (rand() / (float) RAND_MAX - 0.5);
@@ -286,9 +285,9 @@ void tick () {
     KillStrobeBoxes();
 
     pxNewFrame();
-    pxDrawBoxes(strobes, STROBE_MAX);
     pxDrawBoxes(hitmarkers, 69);
     pxDrawBox(&snoop);
+    pxDrawBoxes(strobes, STROBE_MAX);
     pxDrawBoxes(fashions, FASHION_MAX);
     pxDrawBoxes(memes, MEME_MAX);
 }
