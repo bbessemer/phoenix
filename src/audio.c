@@ -44,9 +44,9 @@ static void premix (const int len) {
         for (int j = 0; j < n_samples; j++) {
             for (int k = 0; k < out_channels; k++) {
                 const int index = (in_channels * j_in) + (k % in_channels);
-                const int sample = samples[index];
-                //const int sample_b = samples[index + in_channels];
-                //const int sample = ((sample_a * (0x10000 - tick)) >> 16)
+                const unsigned int sample = samples[index];
+                //const unsigned int sample_b = samples[index + in_channels];
+                //const unsigned int sample = ((sample_a * (0x10000 - tick)) >> 16)
                 //    + ((sample_b * tick) >> 16);
                 internal_buffer[j * out_channels + k] += sample;
                 if (internal_buffer[j * out_channels + k] > loudest)
