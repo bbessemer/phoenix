@@ -216,6 +216,7 @@ void KillFashionStatements () {
 /// STROBE BOXES
 
 static float strobe_time = BEAT;
+static float maxrot2 = M_PI / 3.;
 #define SB_INIT_ALPHA   0.75f
 
 void SpawnStrobeBox () {
@@ -227,7 +228,7 @@ void SpawnStrobeBox () {
     for (int i = 0; i < STROBE_MAX; i++) if (strobes[i].color.a == 0) {
         pxSetBoxDims(strobes + i, x, y, maxlen, 0.15);
         pxSetRotation(&strobes[i].rotation,
-            (rand() / (float) RAND_MAX - 0.5f) * M_PI / 3.f);
+            (rand() / (float) RAND_MAX - 0.5f) * maxrot2);
         RandomColor(&strobes[i].color);
         strobes[i].color.a = SB_INIT_ALPHA;
         ttls[TTL_STROBE_START + i] = 0.f;
@@ -272,6 +273,20 @@ void SoundsInit () {
         sounds[SND_MEME_START + i].src = px_mmap(meme_snd_paths[i]);
 }
 
+/// MUSIC SYNC
+
+void vocals ()
+{
+    maxrot2 = M_PI / 3.f;
+    strobe_time = BEAT;
+}
+
+void BASS ()
+{
+    maxrot2 = M_PI / 1.5f;
+    strobe_time = 0.25 * BEAT;
+}
+
 /// MAIN LOOP
 
 void tick () {
@@ -307,7 +322,34 @@ int main (int argc, char **argv) {
     SnoopInit();
     MemeInit();
     ttls[TTL_BOXSPAWN] = strobe_time;
-    sounds[SND_BANGARANG].playing = 1;
-    while (!pxGetReqt(PX_REQT_EXIT)) tick();
+    while (!pxGetReqt(PX_REQT_EXIT)) {
+        sounds[SND_BANGARANG].playing = 1;
+        pxDelay(48 * BEAT, tick);
+        if (pxGetReqt(PX_REQT_EXIT)) break;
+        BASS();
+        pxDelay(64 * BEAT, tick);
+        if (pxGetReqt(PX_REQT_EXIT)) break;
+        vocals();
+        pxDelay(32 * BEAT, tick);
+        if (pxGetReqt(PX_REQT_EXIT)) break;
+        BASS();
+        pxDelay(64 * BEAT, tick);
+        if (pxGetReqt(PX_REQT_EXIT)) break;
+        vocals();
+        pxDelay(32 * BEAT, tick);
+        if (pxGetReqt(PX_REQT_EXIT)) break;
+        strobe_time = 2 * BEAT;
+        pxDelay(32 * BEAT, tick);
+        if (pxGetReqt(PX_REQT_EXIT)) break;
+        vocals();
+        pxDelay(32 * BEAT, tick);
+        if (pxGetReqt(PX_REQT_EXIT)) break;
+        BASS();
+        pxDelay(64 * BEAT, tick);
+        vocals();
+        while (sounds[SND_BANGARANG].playing && !pxGetReqt(PX_REQT_EXIT))
+            tick();
+        sounds[SND_BANGARANG].cur_sample = 0;
+    }
     return 0;
 }

@@ -56,7 +56,10 @@ static void premix (const int len) {
             if (j_in >= sounds[i].src->len) {
                 if (sounds[i].fate == PX_SOUND_LOOP)
                     j_in -= sounds[i].src->len;
-                else break;
+                else {
+                    sounds[i].playing = 0;
+                    break;
+                }
             }
         }
 
