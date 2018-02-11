@@ -43,6 +43,11 @@
 #define TTL_BOXSPAWN    (TTL_SNOOP + 1)
 #define N_TTLS          (TTL_BOXSPAWN + 1)
 
+#define SND_BANGARANG   0
+#define SND_MEME_START  (SND_BANGARANG + 1)
+#define N_MEME_SNDS     8
+#define N_SOUNDS        (SND_MEME_START + N_MEME_SNDS)
+
 extern px_image_t hitmarker_image;
 extern TTF_Font *px_default_ttf;
 
@@ -56,6 +61,7 @@ static px_box_t memes[MEME_MAX];
 static px_box_t strobes[STROBE_MAX];
 static px_box_t fashions[FASHION_MAX];
 static float ttls[N_TTLS];
+//static px_sound_t sounds[N_SOUNDS];
 
 void tick ();
 
@@ -144,6 +150,7 @@ void ShowRandomMeme (float x, float y) {
 }
 
 void OnSpray () {
+    puts("Spawn");
     float x, y;
     pxGetMouse(&x, &y);
     x += 0.64 * (rand() / (float) RAND_MAX - 0.5);
@@ -245,6 +252,26 @@ void SpawnStrobeAndFashion () {
     }
 }
 
+/// SOUNDS
+/*
+#include <fcntl.h>
+#include <sys/mman.h>
+
+void *px_mmap (const char *path) {
+    const int fd = open(path, O_RDONLY);
+    struct stat s;
+    fstat(fd, &s);
+    return mmap(NULL, s.st_size, PROT_READ, 0, fd, 0);
+}
+
+void SoundsInit () {
+    memset(sounds, 0, N_SOUNDS * sizeof(px_sound_t));
+    pxOpenAudio(2, 96000, 1./60., AUDIO_U16, sounds, N_SOUNDS);
+    sounds[SND_BANGARANG].src = px_mmap("crap/bangarang.swag");
+    for (int i = 0; i < N_MEME_SNDS; i++)
+        sounds[SND_MEME_START + i].src = px_mmap(meme_snd_paths[i]);
+}
+*/
 /// MAIN LOOP
 
 void tick () {

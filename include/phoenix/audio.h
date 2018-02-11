@@ -47,3 +47,6 @@ typedef struct px_sound {
     char playing;
     unsigned char fate; /* see the defines above */
 } px_sound_t;
+
+void pxOpenAudio (int channels, int samplerate, float bufsecs, Uint32 format,
+    px_sound_t* sound_array, int n);

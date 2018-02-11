@@ -44,12 +44,12 @@ const char pxShaderText_Box_FTexture[] =
         "uniform vec4 color;"
         "uniform bool texid;"
         "void main ()"
-        "{"
+        "{ gl_FragColor = vec4(1, 1, 1, 1);"/*
         "   if (texid) {"
         "       gl_FragColor = texture2D(tex, tx_crd_);"
         "   } else {"
         "       gl_FragColor = color;"
-        "   }"
+        "   }"*/
         "}";
 
 const GLfloat pxVertBuf_Box[] =
