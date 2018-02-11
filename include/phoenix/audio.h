@@ -8,8 +8,8 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#define PX_SOUND_DESTROY    0
-#define PX_SOUND_LOOP       1
+#define PX_SOUND_STOP   0
+#define PX_SOUND_LOOP   1
 
 #define PX_SOUND_PRESERVE   255
 

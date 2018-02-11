@@ -53,7 +53,11 @@ static void premix (const int len) {
                     loudest = internal_buffer[j * out_channels + k];
             }
             updateTick(&j_in, &tick, in_samplerate, out_samplerate, 1);
-            if (j_in >= sounds[i].src->len) break;
+            if (j_in >= sounds[i].src->len) {
+                if (sounds[i].fate == PX_SOUND_LOOP)
+                    j_in -= sounds[i].src->len;
+                else break;
+            }
         }
 
         sounds[i].cur_sample = j_in;
