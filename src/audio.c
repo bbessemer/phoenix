@@ -64,7 +64,7 @@ static void premix (const int len) {
 
 void pxMixAudio (void *_unused, Uint8 *buffer, int buflen)
 {
-    const int *bufptr = internal_buffer;
+    const unsigned int *bufptr = internal_buffer;
     int n_samples;
     int channels = px_audio_spec.channels;
 
@@ -128,7 +128,7 @@ void pxMixAudio (void *_unused, Uint8 *buffer, int buflen)
     }}
 }
 
-static unsigned int nextRound (unsigned int x) {
+static unsigned int nextRound (unsigned int arg) {
     arg--;
     arg |= (arg >> 1);
     arg |= (arg >> 2);
