@@ -155,12 +155,14 @@ void OnSpray () {
     x += 0.64 * (rand() / (float) RAND_MAX - 0.5);
     y += 0.64 * (rand() / (float) RAND_MAX - 0.5);
     ShowRandomMeme(x, y);
+    PlayMemeSound();
 }
 
 void OnSnipe () {
     float x, y;
     pxGetMouse(&x, &y);
     ShowRandomMeme(x, y);
+    PlayMemeSound();
 }
 
 void MemeInit () {
@@ -271,6 +273,18 @@ void SoundsInit () {
     sounds[SND_BANGARANG].src = px_mmap("crap/bangarang.swag");
     for (int i = 0; i < N_MEME_SNDS; i++)
         sounds[SND_MEME_START + i].src = px_mmap(meme_snd_paths[i]);
+}
+
+void PlayMemeSound () {
+    int start = rand() % N_MEME_SNDS;
+    for (int i = start; i < start + N_MEME_SNDS; i++) {
+        int idx = SND_MEME_START + (i % N_MEME_SNDS);
+        if (!sounds[idx].playing) {
+            sounds[idx].cur_sample = 0;
+            sounds[idx].playing = 1;
+            return;
+        }
+    }
 }
 
 /// MUSIC SYNC
