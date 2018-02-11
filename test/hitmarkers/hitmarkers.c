@@ -61,7 +61,7 @@ static px_box_t memes[MEME_MAX];
 static px_box_t strobes[STROBE_MAX];
 static px_box_t fashions[FASHION_MAX];
 static float ttls[N_TTLS];
-//static px_sound_t sounds[N_SOUNDS];
+static px_sound_t sounds[N_SOUNDS];
 
 void tick ();
 
@@ -252,15 +252,16 @@ void SpawnStrobeAndFashion () {
 }
 
 /// SOUNDS
-/*
-#include <fcntl.h>
-#include <sys/mman.h>
+
+#include <sys/stat.h>
 
 void *px_mmap (const char *path) {
-    const int fd = open(path, O_RDONLY);
     struct stat s;
-    fstat(fd, &s);
-    return mmap(NULL, s.st_size, PROT_READ, 0, fd, 0);
+    stat(path, &s);
+    void *buf = malloc(s.st_size);
+    FILE *file = fopen(path, "r");
+    fread(buf, 1, s.st_size, file);
+    return buf;
 }
 
 void SoundsInit () {
@@ -270,7 +271,7 @@ void SoundsInit () {
     for (int i = 0; i < N_MEME_SNDS; i++)
         sounds[SND_MEME_START + i].src = px_mmap(meme_snd_paths[i]);
 }
-*/
+
 /// MAIN LOOP
 
 void tick () {
@@ -299,12 +300,14 @@ int main (int argc, char **argv) {
     pxTTFInit("crap/seguisym.ttf");
     PrepareTextures();
     pxCountFPS(PrintFPS, 1000);
+    SoundsInit();
 
     ttls[TTL_BOXSPAWN] = 10.f;
     SpawnHitmarkers();
     SnoopInit();
     MemeInit();
     ttls[TTL_BOXSPAWN] = strobe_time;
+    sounds[SND_BANGARANG].playing = 1;
     while (!pxGetReqt(PX_REQT_EXIT)) tick();
     return 0;
 }
