@@ -44,5 +44,6 @@ typedef struct px_sound {
     float pitch;
     short volume;       /* on a scale of 0 to 1024 */
     unsigned short cur_tick;
+    char playing;
     unsigned char fate; /* see the defines above */
 } px_sound_t;

@@ -8,8 +8,59 @@
 
 static unsigned int internal_buffer[65536];
 static SDL_AudioSpec px_audio_spec;
+static px_sound_t *sounds;
+static int n_sounds;
 
-static void premix (int len) {}
+static void updateTick (size_t *j_in, int *tick, const int in_sr,
+    const int out_sr, const int n_steps)
+{
+    const int ticks_per_step = (in_sr << 16) / out_sr;
+    *tick += ticks_per_step * n_steps;
+    *j_in += *tick >> 16;
+    *tick &= 0xffff;
+}
+
+static void normalize (const unsigned int loudest, const int len) {
+    const unsigned int norm = 0xffffffff / loudest;
+    for (int i = 0; i < len; i++)
+        internal_buffer[i] = (internal_buffer[i] * norm) >> 16;
+}
+
+static void premix (const int len) {
+    unsigned int loudest = 0;
+
+    const int out_samplerate = px_audio_spec.freq;
+    const char out_channels = px_audio_spec.channels;
+    const int n_samples = len / out_channels;
+
+    for (int i = 0; i < n_sounds; i++) if (sounds[i].playing) {
+        const int in_samplerate = sounds[i].src->samplerate;
+        const int in_channels = sounds[i].src->stereo + 1;
+        unsigned short *samples = (unsigned short *)(sounds[i].src + 1);
+        size_t j_in = sounds[i].cur_sample;
+        int tick = sounds[i].cur_tick;
+
+        for (int j = 0; j < n_samples; j++) {
+            for (int k = 0; k < out_channels; k++) {
+                const int index = (in_channels * j_in) + (k % in_channels);
+                const int sample_a = samples[index];
+                const int sample_b = samples[index + in_channels];
+                const int sample = ((sample_a * (0x10000 - tick)) >> 16)
+                    + ((sample_b * tick) >> 16);
+                internal_buffer[j * out_channels + k] += sample;
+                if (internal_buffer[j * out_channels + k] > loudest)
+                    loudest = internal_buffer[j * out_channels + k];
+            }
+            updateTick(&j_in, &tick, in_samplerate, out_samplerate, 1);
+            if (j_in >= sounds[i].src->len) break;
+        }
+
+        sounds[i].cur_sample = j_in;
+        sounds[i].cur_tick = tick;
+    }
+
+    if (loudest > 0xffff) normalize(loudest, len);
+}
 
 void pxMixAudio (void *_unused, Uint8 *buffer, int buflen)
 {
@@ -77,15 +128,30 @@ void pxMixAudio (void *_unused, Uint8 *buffer, int buflen)
     }}
 }
 
-void pxOpenAudio (int channels, int samplerate, float bufsecs, Uint32 format) {
+static unsigned int nextRound (unsigned int x) {
+    arg--;
+    arg |= (arg >> 1);
+    arg |= (arg >> 2);
+    arg |= (arg >> 4);
+    arg |= (arg >> 8);
+    arg |= (arg >> 16);
+    return ++arg;
+}
+
+void pxOpenAudio (int channels, int samplerate, float bufsecs, Uint32 format,
+    px_sound_t* sound_array, int n)
+{
     SDL_AudioSpec want;
 
     memset(&want, 0, sizeof(SDL_AudioSpec));
     want.freq = samplerate;
     want.format = format;
     want.channels = channels;
-    want.samples = px_next_round((unsigned int)(bufsecs * samplerate));
+    want.samples = nextRound((unsigned int)(bufsecs * samplerate));
     want.callback = pxMixAudio;
+
+    sounds = sound_array;
+    n_sounds = n;
 
     if (!SDL_OpenAudio(&want, &px_audio_spec)) SDL_PauseAudio(0);
 }
