@@ -23,6 +23,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
+#include <time.h>
 #include <phoenix/phoenix.h>
 #include <phoenix/imgfile.h>
 #include <phoenix/ttfont.h>
@@ -64,6 +65,7 @@ static float ttls[N_TTLS];
 static px_sound_t sounds[N_SOUNDS];
 
 void tick ();
+void PlayMemeSound ();
 
 void PrintFPS (float fps) {
     printf("%f fps\n", fps);
@@ -193,7 +195,7 @@ void SpawnFashionStatement () {
     const float x = 1.5 * (rand() / (float) RAND_MAX - 0.5)
         * pxGetWindowAspect();
     const float y = 1.5 * (rand() / (float) RAND_MAX - 0.5);
-    char *statement = fashion_statements[rand() % 44];
+    const char *statement = fashion_statements[rand() % 44];
     px_color_t color;
     RandomColor(&color);
     px_image_t *image = pxRenderTextTTF(px_default_ttf, &color, statement);
