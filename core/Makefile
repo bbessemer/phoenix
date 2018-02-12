@@ -6,13 +6,18 @@
 ###
 
 AR = ar -cr
-CFLAGS = -O3 -ffast-math -fPIC
+CFLAGS =  -fPIC
 CC = gcc -c -g
 LLC = clang -c -g -O3
 LD = cc
 
 INCLUDEDIR = include
 LIBS = -lSDL2 -lSDL2_image -lSDL2_ttf -lm -ldl
+
+MACHINE= $(shell uname -s)
+ifeq ($(MACHINE),Darwin)
+    LIBS += -framework OpenGL
+endif
 
 all: target/libphoenix.a
 
@@ -24,12 +29,13 @@ target/libphoenix.a: src/audio.o src/bmpfont.o src/box.llo src/box.o src/color.o
 	@$(AR) $@ $^
 
 hitmarkers: target/hitmarkers target/libphoenix.a
-	./target/hitmarkers
+	-./target/hitmarkers
+	rm target/hitmarkers
 
 target/hitmarkers: test/hitmarkers/hitmarkers.o \
 	test/hitmarkers/hitmarker_image.o
 	@echo "    LD  $@"
-	@$(LD) $^ -Ltarget -lphoenix $(LIBS) -o $@
+	$(LD) $^ -Ltarget -lphoenix $(LIBS) -o $@
 
 %.o: %.c $(INCLUDEDIR)/phoenix/*.h
 	@echo "    CC  $<"

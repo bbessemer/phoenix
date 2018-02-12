@@ -5,12 +5,7 @@
 
 #define PX_COMPILE_GL
 
-#ifdef __APPLE__
-#include <OpenGL/gl3.h>
-#else
 #include <glad/glad.h>
-#endif
-
 #include <SDL2/SDL.h>
 #include <phoenix/texture.h>
 #include <phoenix/error.h>

@@ -8,12 +8,7 @@
 
 #include <stdio.h>
 
-#ifdef __APPLE__
-#include <GL/glew.h>
-#else
 #include <glad/glad.h>
-#endif
-
 #include <SDL2/SDL.h>
 #include <phoenix/renderer.h>
 #include <phoenix/input.h>
@@ -207,6 +202,16 @@ void pxRendererInit_gl () {
     SDL_Window *win;
     SDL_GLContext gl_ctx;
 
+    SDL_Init(SDL_INIT_VIDEO);
+
+    /* Request opengl 3.2 context.
+     * SDL doesn't have the ability to choose which profile at this time of writing,
+     * but it should default to the core profile */
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
+
     win = SDL_CreateWindow("Phoenix Game Engine", SDL_WINDOWPOS_CENTERED,
             SDL_WINDOWPOS_CENTERED, window_size_w, window_size_h,
             SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
@@ -215,21 +220,19 @@ void pxRendererInit_gl () {
     gl_ctx = SDL_GL_CreateContext(win);
     if (!gl_ctx)
     {
+        printf("%s\n", SDL_GetError());
         SDL_DestroyWindow(win);
         pxFatal("2D_GLRenderer", "Could not create GL context", __LINE__);
     }
 
-#ifdef __APPLE__
-    glewExperimental = GL_TRUE;
-    glewInit();
-#else
     if (!gladLoadGL())
     {
         SDL_GL_DeleteContext(gl_ctx);
         SDL_DestroyWindow(win);
         pxFatal("2D_GLRenderer", "Could not initialize OpenGL", __LINE__);
     }
-#endif
+
+    printf("Using OpenGL %d.%d\n", GLVersion.major, GLVersion.minor);
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -252,6 +255,8 @@ void pxRendererInit_gl () {
 
     window = win;
     gl_context = gl_ctx;
+
+    glUseProgram(prog_tex);
 }
 
 void pxNewFrame_gl () {
@@ -271,7 +276,7 @@ void pxNewFrame_gl () {
     glDisable(GL_DEPTH_TEST);
 
     // Camera matrix is easy; it's common to all boxes.
-    glUniformMatrix4fv(color_unifs.camera, 1, GL_FALSE, &camera_matrix[0][0]);
+    glUniformMatrix4fv(tex_unifs.camera, 1, GL_FALSE, &camera_matrix[0][0]);
 }
 
 void pxDrawBoxes_gl (px_box_t *boxes, size_t n_boxes) {
@@ -291,7 +296,6 @@ void pxDrawBox_gl (px_box_t *box) {
 
     if (box->texture || box->color.a != 0)
     {
-        glUseProgram(prog_tex);
         glUniform2fv(tex_unifs.dims, 4, (GLfloat *) box);
         glUniform4fv(tex_unifs.color, 1, (GLfloat *) &box->color);
         glUniform1ui(tex_unifs.texid, box->texture);
