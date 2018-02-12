@@ -261,11 +261,11 @@ void SpawnStrobeAndFashion () {
 #include <sys/stat.h>
 
 void *px_mmap (const char *path) {
-    struct stat s;
-    stat(path, &s);
-    void *buf = malloc(s.st_size);
     FILE *file = fopen(path, "r");
-    fread(buf, 1, s.st_size, file);
+    fseek(file, 0, SEEK_END);
+    size_t size = ftell(file);
+    void *buf = malloc(size);
+    fread(buf, 1, size, file);
     return buf;
 }
 
