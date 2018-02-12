@@ -42,6 +42,11 @@ target/%.o: src/%.c $(INCLUDEDIR)/phoenix/*.h
 	@echo "    CC  $<"
 	@$(CC) $(CFLAGS) -I $(INCLUDEDIR) -o $@ $<
 
+test/hitmarkers/%.o: test/hitmarkers/%.c
+	@echo "    CC  $<"
+	@$(CC) $(CFLAGS) -I $(INCLUDEDIR) -o $@ $<
+
+
 target/%.llo: src/%.ll
 	@echo "    LLC  $<"
 	@$(LLC) -o $@ $<

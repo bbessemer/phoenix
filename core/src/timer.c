@@ -37,6 +37,7 @@ static void fpsStep ()
 }
 
 void pxTimerInit () {
+    SDL_InitSubSystem(SDL_INIT_TIMER);
     perf_int = 1. / (double) SDL_GetPerformanceFrequency();
     frame_count = 0;
     game_time = 0;

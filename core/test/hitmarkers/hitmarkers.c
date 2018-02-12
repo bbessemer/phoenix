@@ -264,6 +264,7 @@ void *px_mmap (const char *path) {
     FILE *file = fopen(path, "r");
     fseek(file, 0, SEEK_END);
     size_t size = ftell(file);
+    rewind(file);
     void *buf = malloc(size);
     fread(buf, 1, size, file);
     return buf;
