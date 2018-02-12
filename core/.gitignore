@@ -1,8 +1,10 @@
 *.o
+*.llo
 *.bc
 *.a
 *.exe
 *.s
+*.c.ll
 a.out
 target/
 .DS_Store

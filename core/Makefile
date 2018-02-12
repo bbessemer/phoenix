@@ -6,8 +6,9 @@
 ###
 
 AR = ar -cr
-CFLAGS = -O3 -ffast-math
+CFLAGS = -O3 -ffast-math -fPIC
 CC = gcc -c -g
+LLC = clang -c -g -O3
 LD = cc
 
 INCLUDEDIR = include
@@ -15,7 +16,7 @@ LIBS = -lSDL2 -lSDL2_image -lSDL2_ttf -lm -ldl
 
 all: target/libphoenix.a
 
-target/libphoenix.a: src/audio.o src/bmpfont.o src/box.o src/color.o \
+target/libphoenix.a: src/audio.o src/bmpfont.o src/box.llo src/box.o src/color.o \
 	src/default_font.o src/gl_shaders.o src/glad.o src/imgfile.o src/input.o \
 	src/renderer_gl.o src/renderer.o src/texture_gl.o src/timer.o src/ttfont.o
 	@echo "    AR  $@"
@@ -34,5 +35,9 @@ target/hitmarkers: test/hitmarkers/hitmarkers.o \
 	@echo "    CC  $<"
 	@$(CC) $(CFLAGS) -I $(INCLUDEDIR) -o $@ $<
 
+%.llo: %.ll
+	@echo "    LLC  $<"
+	@$(LLC) -o $@ $<
+
 clean:
-	rm -v src/*.o target/* test/**/*.o
+	rm -v src/*.o src/*.llo target/* test/**/*.o
