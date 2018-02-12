@@ -6,7 +6,7 @@
 ###
 
 AR = ar -cr
-CFLAGS = -O2
+CFLAGS = -O3 -ffast-math
 CC = gcc -c -g
 LD = cc
 

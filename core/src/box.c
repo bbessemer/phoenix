@@ -35,6 +35,6 @@ void pxSetRotation (px_rotation_t *rot, float theta) {
 
 void pxStepRotation (px_rotation_t *rot, float dt) {
     float c = rot->cos;
-    rot->cos = c - (rot->sin * dt);
-    rot->sin += c * dt;
+    rot->cos = c * (1 - dt*dt) - (rot->sin * dt);
+    rot->sin = rot->sin * (1 - dt*dt) + c * dt;
 }
