@@ -21,9 +21,10 @@ endif
 
 all: target/libphoenix.a
 
-target/libphoenix.a: src/audio.o src/bmpfont.o src/box.llo src/box.o src/color.o \
-	src/default_font.o src/gl_shaders.o src/glad.o src/imgfile.o src/input.o \
-	src/renderer_gl.o src/renderer.o src/texture_gl.o src/timer.o src/ttfont.o
+target/libphoenix.a: target/audio.o target/bmpfont.o target/box.llo \
+	target/box.o target/color.o	target/default_font.o target/gl_shaders.o \
+	target/glad.o target/imgfile.o target/input.o target/renderer_gl.o \
+	target/renderer.o target/texture_gl.o target/timer.o target/ttfont.o
 	@echo "    AR  $@"
 	@mkdir -p target
 	@$(AR) $@ $^
@@ -37,13 +38,13 @@ target/hitmarkers: test/hitmarkers/hitmarkers.o \
 	@echo "    LD  $@"
 	$(LD) $^ -Ltarget -lphoenix $(LIBS) -o $@
 
-%.o: %.c $(INCLUDEDIR)/phoenix/*.h
+target/%.o: src/%.c $(INCLUDEDIR)/phoenix/*.h
 	@echo "    CC  $<"
 	@$(CC) $(CFLAGS) -I $(INCLUDEDIR) -o $@ $<
 
-%.llo: %.ll
+target/%.llo: src/%.ll
 	@echo "    LLC  $<"
 	@$(LLC) -o $@ $<
 
 clean:
-	rm -v src/*.o src/*.llo target/* test/**/*.o
+	rm -v target/* test/**/*.o
