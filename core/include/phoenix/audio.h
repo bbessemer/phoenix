@@ -7,6 +7,7 @@
 
 #include <stddef.h>
 #include <stdint.h>
+#include <SDL2/SDL.h>
 
 #define PX_SOUND_STOP   0
 #define PX_SOUND_LOOP   1
@@ -29,14 +30,14 @@
  * application), but it can be done. Why invent a new format for anything?
  */
 
-#pragma push(pack, 1)
+#pragma pack(push, 1)
 typedef struct px_sound_src {
     uint16_t format;        /* proprietary format code */
     uint32_t len;           /* length of the audio in samples, little-endian */
     uint32_t samplerate;    /* samples per second, little-endian */
     uint8_t stereo;         /* 0 for mono, 1 for stereo (basically (channels - 1)) */
 } __attribute__((packed)) px_sound_src_t;
-#pragma pop(pack)
+#pragma pack(pop)
 
 typedef struct px_sound {
     px_sound_src_t *src;
