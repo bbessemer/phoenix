@@ -6,6 +6,7 @@
 #pragma once
 
 #include <SDL2/SDL_ttf.h>
+#include "texture.h"
 
 void pxTTFInit (const char *dflt_fontpath);
 px_image_t *pxRenderTextTTF (TTF_Font *font, px_color_t *color,
