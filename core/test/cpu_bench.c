@@ -12,6 +12,8 @@ int main (void) {
         pxSetBoxDims(&box, 0.1, 0.2, 0.3, 0.4);
         pxSetBoxPos(&box, 0.69, 0.69);
         pxSetBoxSize(&box, 0.420, 0.420);
+        pxSetRotation(&box.rotation, 1.23);
+        pxStepRotation(&box.rotation, 0.01);
         pxSetColor_RGBAf(&color, 0.5, 0.5, 0.5, 1.);
         pxSetColor_RGBAi(&color, 221, 168, 42, 255);
         pxSetColor_HSVAf(&color, 72., 0.6, 0.5, 0.9);
