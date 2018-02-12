@@ -22,9 +22,6 @@ static GLuint vao;
 static GLuint vbo_vert;
 static GLuint vbo_txc;
 
-static const GLfloat null_rots[2] = {1., 0.};
-static const GLfloat origin[2] = {0., 0.};
-
 struct gl_uniforms
 {
     GLint dims;
@@ -154,7 +151,7 @@ static int init_shader_progs (void)
         free(log);
         return -1;
     }
-
+/*
     GLuint fsh_color = glCreateShader(GL_FRAGMENT_SHADER);
     const GLchar *fsh_src = pxShaderText_Box_FColor;
     glShaderSource(fsh_color, 1, &fsh_src, 0);
@@ -172,7 +169,7 @@ static int init_shader_progs (void)
 
     prog_color = create_shader_prog(vsh, fsh_color);
     init_uniforms(&color_unifs, prog_color);
-
+*/
     GLuint fsh_tex = glCreateShader(GL_FRAGMENT_SHADER);
     const GLchar *fsht_src = pxShaderText_Box_FTexture;
     glShaderSource(fsh_tex, 1, &fsht_src, 0);
