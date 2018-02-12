@@ -6,7 +6,7 @@
 ###
 
 AR = ar -cr
-CFLAGS =  -fPIC
+CFLAGS = -O3 -ffast-math -fPIC
 CC = gcc -c -g
 LLC = clang -c -g -O3
 LD = cc
