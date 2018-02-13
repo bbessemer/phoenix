@@ -269,7 +269,16 @@ void *px_mmap (const char *path) {
     fread(buf, 1, size, file);
     return buf;
 }
-
+/*
+void *px_mmap (const char *path) {
+    struct stat s;
+    stat(path, &s);
+    void *buf = malloc(s.st_size);
+    FILE *file = fopen(path, "r");
+    fread(buf, 1, s.st_size, file);
+    return buf;
+}
+*/
 void SoundsInit () {
     memset(sounds, 0, N_SOUNDS * sizeof(px_sound_t));
     pxOpenAudio(2, 96000, 1./60., AUDIO_U16, sounds, N_SOUNDS);

@@ -131,8 +131,8 @@ void pxMixAudio (void *_unused, Uint8 *buffer, int buflen)
         n_samples = (buflen >> 2);
         premix(n_samples);
         for (int i = 0; i < n_samples; i++)
-            //*(buffer_f32++) = ((signed)*(bufptr++) - 0x8000) / 32768.0;
-            *(buffer_f32++) = sinf(i / 400.f);
+            *(buffer_f32++) = ((signed)*(bufptr++) - 0x8000) / 32768.0;
+            //*(buffer_f32++) = sinf(i / 400.f);
         break;
     }}
 }
@@ -167,7 +167,6 @@ void pxOpenAudio (int channels, int samplerate, float bufsecs, Uint32 format,
     n_sounds = n;
 
     if (SDL_InitSubSystem(SDL_INIT_AUDIO) < 0) puts(SDL_GetError());
-    if (SDL_OpenAudioDevice(NULL, 0, &want, &px_audio_spec,
-        SDL_AUDIO_ALLOW_ANY_CHANGE) > 0) SDL_PauseAudio(0);
+    if (!SDL_OpenAudio(&want, &px_audio_spec)) SDL_PauseAudio(0);
     else printf("Audio failed to open: %s\n", SDL_GetError());
 }
