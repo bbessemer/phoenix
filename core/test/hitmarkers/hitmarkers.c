@@ -281,7 +281,7 @@ void *px_mmap (const char *path) {
 */
 void SoundsInit () {
     memset(sounds, 0, N_SOUNDS * sizeof(px_sound_t));
-    pxOpenAudio(2, 96000, 1./60., AUDIO_U16, sounds, N_SOUNDS);
+    pxOpenAudio(2, 48000, 1./60., AUDIO_U16, sounds, N_SOUNDS);
     sounds[SND_BANGARANG].src = px_mmap("crap/bangarang.swag");
     for (int i = 0; i < N_MEME_SNDS; i++)
         sounds[SND_MEME_START + i].src = px_mmap(meme_snd_paths[i]);
