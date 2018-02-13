@@ -31,7 +31,7 @@ target/libphoenix.a: target/audio.o target/bmpfont.o target/box.llo \
 
 hitmarkers: target/hitmarkers target/libphoenix.a
 	-./target/hitmarkers
-	rm target/hitmarkers
+	rm target/hitmarkers test/hitmarkers/hitmarkers.o
 
 target/hitmarkers: test/hitmarkers/hitmarkers.o \
 	test/hitmarkers/hitmarker_image.o

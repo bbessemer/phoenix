@@ -16,14 +16,14 @@ const char pxShaderText_Box_V[] =
         "in vec2 pos;"
         "in vec2 tx_crd;"
         "out vec2 tx_crd_;"
-        "uniform vec2 dims[4];"
+        "uniform vec2 dims[5];"
         "uniform mat4 camera;"
         "void main ()"
         "{"
         "   mat2 dims_mat = mat2(dims[1].x, 0, 0, dims[1].y);"
-        "   vec2 unrot_pos = dims_mat * (pos - dims[3]);"
+        "   vec2 unrot_pos = dims_mat * pos;"
         "   mat2 rotmat = mat2(dims[2], -dims[2].y, dims[2].x);"
-        "   vec2 final_pos = (rotmat * unrot_pos) + (dims_mat * dims[3]);"
+        "   vec2 final_pos = rotmat * unrot_pos;"
         "   tx_crd_ = tx_crd;"
         //"   gl_Position = camera * vec4(final_pos + 2*dims[0], 0, 1);"
         "   gl_Position = camera * vec4(final_pos + 2*dims[0], 0, 1);"
@@ -31,11 +31,11 @@ const char pxShaderText_Box_V[] =
 
 const char pxShaderText_Box_FColor[] =
         "#version 150\n"
-        "uniform vec4 color;"
+        "uniform vec2 dims[5];"
         "out vec4 fragColor;"
         "void main ()"
         "{"
-        "	fragColor = color;"
+        "	fragColor = vec4(dims[3], dims[4]);"
         //"   gl_FragColor = vec4(1, 1, 1, 1);"
         "}";
 
@@ -43,7 +43,7 @@ const char pxShaderText_Box_FTexture[] =
         "#version 150\n"
         "uniform sampler2D tex;"
         "in vec2 tx_crd_;"
-        "uniform vec4 color;"
+        "uniform vec2 dims[5];"
         "uniform bool texid;"
         "out vec4 fragColor;"
         "void main ()"
@@ -51,7 +51,7 @@ const char pxShaderText_Box_FTexture[] =
         "   if (texid) {"
         "       fragColor = texture(tex, tx_crd_);"
         "   } else {"
-        "       fragColor = color;"
+        "       fragColor = vec4(dims[3], dims[4]);"
         "   }"
         "}";
 

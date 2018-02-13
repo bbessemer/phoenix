@@ -6,9 +6,9 @@
 %struct.px_rotation = type { float, float, float, float }
 %struct.px_color = type { float, float, float, float }
 
-define void @pxZeroBox (i448* %box) {
-    store i448 0, i448* %box, align 4
-    %real_box = bitcast i448* %box to %struct.px_box*
+define void @pxZeroBox (i440* %box) {
+    store i440 0, i440* %box, align 4
+    %real_box = bitcast i440* %box to %struct.px_box*
     %cos = getelementptr inbounds %struct.px_box, %struct.px_box* %real_box,
         i64 0, i32 4, i32 0
     store float 1.0e+0, float* %cos, align 4

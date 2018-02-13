@@ -328,7 +328,7 @@ void tick () {
 
     pxNewFrame();
     pxDrawBoxes(hitmarkers, 69);
-    pxDrawBox(&snoop);
+    pxDrawBoxes(&snoop, 1);
     pxDrawBoxes(strobes, STROBE_MAX);
     pxDrawBoxes(fashions, FASHION_MAX);
     pxDrawBoxes(memes, MEME_MAX);
