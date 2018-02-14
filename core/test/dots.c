@@ -147,8 +147,8 @@ int main ()
 
     pxSetColor(pxBackgroundColor(), 1, 1, 1, 1);
     pxTimerInit();
-    //SDL_GL_SetSwapInterval(1); // Turn on vsync so as to not murder my battery
-    pxCountFPS(RedrawFPS, 1000);
+    pxSetVSync(1); // Turn on vsync so as to not murder my battery
+    pxCountFPS(RedrawFPS, 128);
 
     OnEatPoison(); // starts new game
 
@@ -157,15 +157,15 @@ int main ()
         pxGetMouse(&character.x, &character.y);
 
         if (score) pxTimerCycle(&ttl, 1);
-        else pxTimerCycle(NULL, 0);        
+        else pxTimerCycle(NULL, 0);
 
         WambaCheck();
 
         pxNewFrame();
-        pxDrawBox(&food);
-        pxDrawBox(&poison);
-        pxDrawBox(&character);
-        pxDrawBox(&score_disp);
-        pxDrawBox(&fps_disp);
+        pxDrawBoxes(&food, 1);
+        pxDrawBoxes(&poison, 1);
+        pxDrawBoxes(&character, 1);
+        pxDrawBoxes(&score_disp, 1);
+        pxDrawBoxes(&fps_disp, 1);
     }
 }
