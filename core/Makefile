@@ -38,6 +38,10 @@ target/hitmarkers: test/hitmarkers/hitmarkers.o \
 	@echo "    LD  $@"
 	$(LD) $^ -Ltarget -lphoenix $(LIBS) -o $@
 
+dots:
+	$(LD) -I $(INCLUDEDIR) test/dots.c -Ltarget -lphoenix $(LIBS) -o target/dots
+	-target/dots
+
 target/%.o: src/%.c $(INCLUDEDIR)/phoenix/*.h
 	@echo "    CC  $<"
 	@$(CC) $(CFLAGS) -I $(INCLUDEDIR) -o $@ $<
