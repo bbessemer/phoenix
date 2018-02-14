@@ -5,7 +5,8 @@
 
 #define PX_COMPILE_GL
 
-#ifdef __EMSCRIPTEN__
+#include <phoenix/glestest.h>
+#ifdef PX_GLES
 #include <gles3/gl3.h>
 #else
 #include <glad/glad.h>

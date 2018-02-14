@@ -8,7 +8,8 @@
 
 #include <stdio.h>
 
-#ifndef __EMSCRIPTEN__
+#include <phoenix/glestest.h>
+#ifndef PX_GLES
 #include <glad/glad.h>
 #else
 #include <gles3/gl3.h>
