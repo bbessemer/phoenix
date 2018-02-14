@@ -282,7 +282,8 @@ void pxDrawBoxes_gl (px_box_t *boxes, size_t n_boxes) {
     GLuint last_texture = 0;
     for (px_box_t *box = boxes; box < end; box++)
     if (box->texture || box->color.a != 0) {
-        glUniform2fv(tex_unifs.dims, 5, (GLfloat *) box);
+        glUniform2fv(tex_unifs.dims, 3, (GLfloat *) box);
+        glUniform4fv(tex_unifs.color, 1, (GLfloat *) &box->color);
         glUniform1ui(tex_unifs.texid, (box->texture != 0));
         if (box->texture && box->texture != last_texture) {
             glBindTexture(GL_TEXTURE_2D, box->texture);

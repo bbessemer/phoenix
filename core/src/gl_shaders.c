@@ -16,7 +16,7 @@ const char pxShaderText_Box_V[] =
         "in vec2 pos;"
         "in vec2 tx_crd;"
         "out vec2 tx_crd_;"
-        "uniform vec2 dims[5];"
+        "uniform vec2 dims[3];"
         "uniform mat4 camera;"
         "void main ()"
         "{"
@@ -43,7 +43,7 @@ const char pxShaderText_Box_FTexture[] =
         "#version 150\n"
         "uniform sampler2D tex;"
         "in vec2 tx_crd_;"
-        "uniform vec2 dims[5];"
+        "uniform vec4 color;"
         "uniform bool texid;"
         "out vec4 fragColor;"
         "void main ()"
@@ -51,7 +51,7 @@ const char pxShaderText_Box_FTexture[] =
         "   if (texid) {"
         "       fragColor = texture(tex, tx_crd_);"
         "   } else {"
-        "       fragColor = vec4(dims[3], dims[4]);"
+        "       fragColor = color;"
         "   }"
         "}";
 
