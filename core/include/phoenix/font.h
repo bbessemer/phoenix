@@ -5,6 +5,7 @@
 
 #pragma once
 
+#include <stddef.h>
 #include <phoenix/texture.h>
 
 typedef struct px_bmpfont {
