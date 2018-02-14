@@ -337,11 +337,12 @@ void tick () {
 int main (int argc, char **argv) {
     srand(time(NULL));
     pxRendererInit();
-    pxTimerInit();
+    pxSetVSync(1);
     pxTTFInit("crap/seguisym.ttf");
     PrepareTextures();
     pxCountFPS(PrintFPS, 1000);
     SoundsInit();
+    pxTimerInit();
 
     ttls[TTL_BOXSPAWN] = 10.f;
     SpawnHitmarkers();

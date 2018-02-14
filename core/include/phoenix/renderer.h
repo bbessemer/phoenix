@@ -5,6 +5,7 @@
 
 #pragma once
 
+#include <SDL2/SDL.h>
 #include <phoenix/box.h>
 
 #define PX_CAM_NOCHANGE 0
@@ -25,6 +26,10 @@ void pxNewFrame_gl ();
 void pxRendererInit_gl ();
 void pxDrawBoxes_gl (px_box_t *boxes, size_t n_boxes);
 void pxDrawBox_gl (px_box_t *box);
+
+static void pxSetVSync (int on) {
+    SDL_GL_SetSwapInterval(on);
+}
 
 #endif
 
