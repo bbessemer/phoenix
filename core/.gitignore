@@ -11,3 +11,4 @@ target/
 *.dSYM/
 perf.data
 oprofile_data/
+callgrind.out*

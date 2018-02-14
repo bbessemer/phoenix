@@ -30,27 +30,44 @@ static void premix (const int len) {
     memset(internal_buffer, 0, 65536 * sizeof(unsigned int));
     unsigned int loudest = 0;
 
-    const int out_samplerate = px_audio_spec.freq;
+    const unsigned int out_samplerate = px_audio_spec.freq;
     const char out_channels = px_audio_spec.channels;
-    const int n_samples = len / out_channels;
+    const unsigned int n_samples = len / out_channels;
 
     for (int i = 0; i < n_sounds; i++) if (sounds[i].playing) {
-        const int in_samplerate = sounds[i].src->samplerate;
-        const int in_channels = sounds[i].src->stereo + 1;
+        const unsigned int in_samplerate = sounds[i].src->samplerate;
+        const unsigned int in_channels = sounds[i].src->stereo + 1;
         unsigned short *samples = (unsigned short *)(sounds[i].src + 1);
         size_t j_in = sounds[i].cur_sample;
         int tick = sounds[i].cur_tick;
 
-        for (int j = 0; j < n_samples; j++) {
+        if (0) {//in_channels == out_channels && in_samplerate == out_samplerate) {
+            unsigned int idx_in = j_in * in_channels;
+            for (int j = 0; j < n_samples; j++) {
+                for (int k = 0; k < out_channels; k++, idx_in++) {
+                    internal_buffer[j * out_channels + k] += samples[idx_in];
+                    if (internal_buffer[j * out_channels + k] > loudest)
+                        loudest = internal_buffer[j * out_channels + k];
+                }
+                if (++j_in >= sounds[i].src->len) {
+                    if (sounds[i].fate == PX_SOUND_LOOP)
+                        j_in -= sounds[i].src->len;
+                    else {
+                        sounds[i].playing = 0;
+                        break;
+                    }
+                }
+            }
+        }
+
+        else for (int j = 0; j < n_samples; j++) {
+            int k_in = 0;
             for (int k = 0; k < out_channels; k++) {
-                const int index = (in_channels * j_in) + (k % in_channels);
-                const unsigned int sample = samples[index];
-                //const unsigned int sample_b = samples[index + in_channels];
-                //const unsigned int sample = ((sample_a * (0x10000 - tick)) >> 16)
-                //    + ((sample_b * tick) >> 16);
-                internal_buffer[j * out_channels + k] += sample;
+                const int index = (in_channels * j_in) + k_in;
+                internal_buffer[j * out_channels + k] += samples[index];
                 if (internal_buffer[j * out_channels + k] > loudest)
                     loudest = internal_buffer[j * out_channels + k];
+                if (++k_in >= in_channels) k_in = 0;
             }
             updateTick(&j_in, &tick, in_samplerate, out_samplerate, 1);
             if (j_in >= sounds[i].src->len) {
@@ -155,6 +172,9 @@ void pxOpenAudio (int channels, int samplerate, float bufsecs, Uint32 format,
     memset(&want, 0, sizeof(SDL_AudioSpec));
     want.freq = samplerate;
 #ifdef __APPLE__
+    /* CoreAudio is stupid and simply shits itself if you request a format other
+     * than F32, rather than correcting the SDL_AudioSpec like SDL is supposed
+     * to do. TODO: report this bug to SDL. */
     want.format = AUDIO_F32;
 #else
     want.format = format;

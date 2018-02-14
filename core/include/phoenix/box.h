@@ -10,9 +10,9 @@
 
 struct px_rotation {
     float cos, sin;
-    float cx, cy;
 };
 
+#pragma pack(push, 1)
 struct px_box {
     float x, y, w, h;
     struct px_rotation rotation;
@@ -20,6 +20,7 @@ struct px_box {
     px_tex_t texture;
     unsigned int ent_id;
 };
+#pragma pack(pop)
 
 typedef struct px_box px_box_t;
 typedef struct px_rotation px_rotation_t;

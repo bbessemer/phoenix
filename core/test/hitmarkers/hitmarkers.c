@@ -55,6 +55,8 @@ extern TTF_Font *px_default_ttf;
 static px_tex_t hitmarker_tex;
 static px_tex_t meme_texes[13];
 static px_tex_t four[20];   // Snoop Dogg GIF (20 frames)
+static px_tex_t fashion_texes[44];
+static float fashion_aratios[44];
 
 static px_box_t hitmarkers[69];
 static px_box_t snoop;
@@ -86,6 +88,15 @@ void PrepareTextures () {
         if (!meme_img) pxFatal("PrepareTextures", meme_img_paths[i], __LINE__);
         meme_texes[i] = pxMakeTexture(meme_img);
         free(meme_img);
+    }
+    for (int i = 0; i < 44; i++) {
+        px_color_t color;
+        RandomColor(&color);
+        px_image_t *image = pxRenderTextTTF(px_default_ttf, &color,
+            fashion_statements[i]);
+        fashion_texes[i] = pxMakeTexture(image);
+        fashion_aratios[i] = image->w / image->h;
+        free(image);
     }
 }
 
@@ -195,17 +206,12 @@ void SpawnFashionStatement () {
     const float x = 1.5 * (rand() / (float) RAND_MAX - 0.5)
         * pxGetWindowAspect();
     const float y = 1.5 * (rand() / (float) RAND_MAX - 0.5);
-    const char *statement = fashion_statements[rand() % 44];
-    px_color_t color;
-    RandomColor(&color);
-    px_image_t *image = pxRenderTextTTF(px_default_ttf, &color, statement);
-
+    int r = rand() % 44;
     for (int i = 0; i < FASHION_MAX; i++) if (fashions[i].texture == 0) {
-        pxSetBoxDims(fashions + i, x, y, 0.15 * (image->w / image->h), 0.15);
+        pxSetBoxDims(fashions + i, x, y, 0.15 * fashion_aratios[r], 0.15);
         pxSetRotation(&fashions[i].rotation,
             (rand() / (float) RAND_MAX - 0.5f) * M_PI / 3.f);
-        fashions[i].texture = pxRemakeTexture(fashions[i].texture, image);
-        free(image);
+        fashions[i].texture = fashion_texes[r];
         ttls[TTL_FASHION_START + i] = 0.69;
         return;
     }
@@ -281,7 +287,7 @@ void *px_mmap (const char *path) {
 */
 void SoundsInit () {
     memset(sounds, 0, N_SOUNDS * sizeof(px_sound_t));
-    pxOpenAudio(2, 96000, 1./60., AUDIO_U16, sounds, N_SOUNDS);
+    pxOpenAudio(2, 48000, 1./60., AUDIO_U16, sounds, N_SOUNDS);
     sounds[SND_BANGARANG].src = px_mmap("crap/bangarang.swag");
     for (int i = 0; i < N_MEME_SNDS; i++)
         sounds[SND_MEME_START + i].src = px_mmap(meme_snd_paths[i]);
@@ -328,7 +334,7 @@ void tick () {
 
     pxNewFrame();
     pxDrawBoxes(hitmarkers, 69);
-    pxDrawBox(&snoop);
+    pxDrawBoxes(&snoop, 1);
     pxDrawBoxes(strobes, STROBE_MAX);
     pxDrawBoxes(fashions, FASHION_MAX);
     pxDrawBoxes(memes, MEME_MAX);

@@ -21,7 +21,7 @@ endif
 
 all: target/libphoenix.a
 
-target/libphoenix.a: target/audio.o target/bmpfont.o target/box.llo \
+target/libphoenix.a: target/audio.o target/bmpfont.o \
 	target/box.o target/color.o	target/default_font.o target/gl_shaders.o \
 	target/glad.o target/imgfile.o target/input.o target/renderer_gl.o \
 	target/renderer.o target/texture_gl.o target/timer.o target/ttfont.o
@@ -31,7 +31,7 @@ target/libphoenix.a: target/audio.o target/bmpfont.o target/box.llo \
 
 hitmarkers: target/hitmarkers target/libphoenix.a
 	-./target/hitmarkers
-	rm target/hitmarkers
+	rm target/hitmarkers test/hitmarkers/hitmarkers.o
 
 target/hitmarkers: test/hitmarkers/hitmarkers.o \
 	test/hitmarkers/hitmarker_image.o

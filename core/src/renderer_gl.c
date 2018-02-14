@@ -201,13 +201,10 @@ void pxRendererInit_gl () {
 
     SDL_Init(SDL_INIT_VIDEO);
 
-    /* Request opengl 3.2 context.
-     * SDL doesn't have the ability to choose which profile at this time of writing,
-     * but it should default to the core profile */
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
 
     win = SDL_CreateWindow("Phoenix Game Engine", SDL_WINDOWPOS_CENTERED,
             SDL_WINDOWPOS_CENTERED, window_size_w, window_size_h,
@@ -254,6 +251,7 @@ void pxRendererInit_gl () {
     gl_context = gl_ctx;
 
     glUseProgram(prog_tex);
+    glActiveTexture(GL_TEXTURE0);
 }
 
 void pxNewFrame_gl () {
@@ -278,8 +276,18 @@ void pxNewFrame_gl () {
 
 void pxDrawBoxes_gl (px_box_t *boxes, size_t n_boxes) {
     px_box_t * const end = boxes + n_boxes;
+    GLuint last_texture = 0;
     for (px_box_t *box = boxes; box < end; box++)
-        pxDrawBox_gl(box);
+    if (box->texture || box->color.a != 0) {
+        glUniform2fv(tex_unifs.dims, 3, (GLfloat *) box);
+        glUniform4fv(tex_unifs.color, 1, (GLfloat *) &box->color);
+        glUniform1ui(tex_unifs.texid, (box->texture != 0));
+        if (box->texture && box->texture != last_texture) {
+            glBindTexture(GL_TEXTURE_2D, box->texture);
+            last_texture = box->texture;
+        }
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    }
 }
 
 void pxDrawBox_gl (px_box_t *box) {
@@ -290,14 +298,4 @@ void pxDrawBox_gl (px_box_t *box) {
         glUniform4fv(color_unifs.color, 1, (GLfloat *) &box->color);
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     }*/
-
-    if (box->texture || box->color.a != 0)
-    {
-        glUniform2fv(tex_unifs.dims, 4, (GLfloat *) box);
-        glUniform4fv(tex_unifs.color, 1, (GLfloat *) &box->color);
-        glUniform1ui(tex_unifs.texid, box->texture);
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, box->texture);
-        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-    }
 }
