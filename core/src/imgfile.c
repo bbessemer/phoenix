@@ -3,6 +3,8 @@
  * All rights reserved.
  */
 
+#ifndef PX_NO_IMGFILE
+
 #include <SDL2/SDL_image.h>
 #include <phoenix/imgfile.h>
 
@@ -28,3 +30,5 @@ px_image_t *pxLoadImage (const char *path) {
     image->h = h;
     return image;
 }
+
+#endif
