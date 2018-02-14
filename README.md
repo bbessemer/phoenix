@@ -1,21 +1,20 @@
-# Phoenix Static Edition
+# Phoenix (Static Edition)
 
-This is a new version of my Phoenix game engine, written to exclusively use
-static or application-allocated memory: that is, no `malloc` whatsoever.
-Although this introduces a small amount of additional complexity for the
-application developer, a significant gain in performance may be made by using a
-contiguous block of RAM for each type of object, without the contingencies
-necessary to allow that block to expand.
-
-Obviously, it is not possible to avoid dynamic memory when dealing with large
-multimedia objects such as textures and sounds. Static Edition does provide
-functions for media loading which use `malloc`, but they have been segregated as
-far as possible from the main core of the engine. If the developer wished to
-replace them with his own utilities (for example, to support a new audio
-format), he could do so easily.
-
-In tests I have achieved a framerate gain of roughly 50–100%, depending on
-hardware, over the prior version of Phoenix.
+Phoenix is a lightweight 2D game engine, written in C and based on
+[SDL](http://libsdl.org) and OpenGL. Phoenix has made the unique design decision
+to avoid dynamic memory allocation altogether: there are only a few calls to
+`malloc` in the entire engine: a few to get OpenGL error strings, one to store
+loaded image files, and one to store rendered text. This introduces a few
+additional complexities for the end developer (more on this later), but
+eliminates a number common game engine problems: the reallocation–cache
+performance tradeoff, garbage collection, as well as the entire class of bugs
+related to complex internal state. (Phoenix is not quite pure-functional—it is
+very difficult to do that in C—but its design is certainly inspired by
+functional programming concepts.) The lack of engine-provided dynamic allocation
+(the developer may dynamically allocate anything he likes) means Phoenix may not
+be suitable for all projects, but for the significant fraction that can be
+written in an appropriate style, significant performance improvements may be
+found by using it.
 
 ## What the hell?
 
@@ -27,7 +26,7 @@ list which is comparatively easy to reallocate (yet incurring a nearly 100%
 cache miss rate due to the indirection); or store all objects (or all objects of
 a class) in a single contiguous list which is extremely costly to grow, because
 the full bulk of all the engine's objects must be moved if there is insufficient
-free memory at the end of the list. The prior version of Phoenix created
+free memory at the end of the list. A prior version of Phoenix created
 a novel solution to this problem: objects were allocated in large, fixed-sized
 blocks which were joined in a linked list. However, the code to implement these
 'memory pages' proved to be extremely complex and prone to bugs.
@@ -98,9 +97,21 @@ void ShowRandomMeme (float x, float y) {
 }
 ```
 
-## Statelessness
+## Performance
 
-> A large fraction of the flaws in software development are due to programmers
-> not fully understanding all the possible states their code may execute in.
+I haven't exactly done any formal benchmarking, but Phoenix reaches a hard GPU
+bottleneck (at more than 9,000 FPS) on my NVIDIA GTX 1060 running an application
+that draws less than 100 boxes at a resolution of only 1024×768. I dare you to
+find a production engine that can do that.
 
-—[John Carmack](https://www.gamasutra.com/view/news/169296/Indepth_Functional_programming_in_C.php)
+This of course begs the question of who needs 9,000 FPS. No one does—but
+performance is critical nowadays for battery reasons. If the game is capable of
+running at 9,000 FPS, but has been vsynced to 60, then for 99.3% of the time
+your CPU can turn itself off and go to sleep.
+
+## Licensing
+
+Although I have published the source here, this is not quite an open-source
+project. You may use it for your own personal purposes, but you may not publish,
+for free or commercial purposes, anything written with it without my permission.
+You also may not use any fragments code contained here in another project.
