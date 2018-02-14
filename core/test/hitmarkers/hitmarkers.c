@@ -68,6 +68,7 @@ static px_sound_t sounds[N_SOUNDS];
 
 void tick ();
 void PlayMemeSound ();
+void RandomColor (px_color_t *);
 
 void PrintFPS (float fps) {
     printf("%f fps\n", fps);
