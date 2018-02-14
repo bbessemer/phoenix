@@ -6,7 +6,7 @@
 #include <string.h>
 #include <math.h>
 #include <phoenix/box.h>
-/*
+
 void pxZeroBox(px_box_t *box) {
     memset(box, 0, sizeof(*box));
     box->rotation.cos = 1;
@@ -28,14 +28,13 @@ void pxSetBoxPos (px_box_t *box, float x, float y) {
     box->x = x;
     box->y = y;
 }
-*/
+
 void pxSetRotation (px_rotation_t *rot, float theta) {
     *rot = (px_rotation_t) {cosf(theta), sinf(theta)};
 }
-/*
+
 void pxStepRotation (px_rotation_t *rot, float dt) {
     float c = rot->cos;
     rot->cos = c * (1 - dt*dt) - (rot->sin * dt);
     rot->sin = rot->sin * (1 - dt*dt) + c * dt;
 }
-*/
