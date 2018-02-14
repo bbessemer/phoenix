@@ -109,6 +109,8 @@ void RespawnHitmarker (int i) {
         * pxGetWindowAspect();
     const float y = 1.8 * (rand() / (float) RAND_MAX - 0.5);
     pxSetBoxPos(hitmarkers + i, x, y);
+    pxSetRotation(&hitmarkers[i].rotation,
+        1.571 * (rand() / (float) RAND_MAX));
     ttls[TTL_HITMARKER] = respawn_interval;
 }
 
