@@ -41,7 +41,7 @@ static void premix (const int len) {
         size_t j_in = sounds[i].cur_sample;
         int tick = sounds[i].cur_tick;
 
-        if (0) {//in_channels == out_channels && in_samplerate == out_samplerate) {
+        if (in_channels == out_channels && in_samplerate == out_samplerate) {
             unsigned int idx_in = j_in * in_channels;
             for (int j = 0; j < n_samples; j++) {
                 for (int k = 0; k < out_channels; k++, idx_in++) {
