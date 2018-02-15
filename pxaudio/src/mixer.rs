@@ -18,7 +18,7 @@ impl<'a> Mixer<'a> {
         }
     }
 
-    pub fn mix_typed<T> (&mut self, buffer: &mut [T]) {
+    fn mix_typed<T> (&mut self, buffer: &mut [T]) {
 
     }
 
@@ -41,7 +41,7 @@ impl<'a> Mixer<'a> {
 }
 
 #[no_mangle]
-unsafe extern "C" fn pxMixAudio<'a> (mixer: *mut c_void, buffer: *mut u8, buflen: i32) {
+pub unsafe extern "C" fn pxMixAudio<'a> (mixer: *mut c_void, buffer: *mut u8, buflen: i32) {
     Mixer::mix(&mut *(mixer as *mut Mixer<'a>),
         slice::from_raw_parts_mut(buffer, buflen as usize))
 }
