@@ -19,10 +19,15 @@ impl<'a> Mixer<'a> {
     }
 
     pub fn mix_typed<T> (&mut self, buffer: &mut [T]) {
-
+        for mut sound in self.sounds {
+            let test: &mut Sound = sound;
+        }
     }
 
     pub fn mix (&mut self, buffer: &mut [u8]) {
+        // Recast the slice to the appropriate type. This is an unsafe
+        // and entirely inappropriate thing to do in Rust, but SDL leaves
+        // us with no choice.
         unsafe { match self.spec.format {
             AUDIO_U8 => self.mix_typed(buffer),
             AUDIO_S8 => self.mix_typed(slice::from_raw_parts_mut(
