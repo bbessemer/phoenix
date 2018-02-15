@@ -91,7 +91,6 @@ void pxMixAudio (void *_unused, Uint8 *buffer, int buflen)
 {
     const unsigned int *bufptr = internal_buffer;
     int n_samples;
-    int channels = px_audio_spec.channels;
 
     memset(buffer, 0, buflen);
 
