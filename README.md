@@ -114,4 +114,4 @@ your CPU can turn itself off and go to sleep.
 Although I have published the source here, this is not quite an open-source
 project. You may use it for your own personal purposes, but you may not publish,
 for free or commercial purposes, anything written with it without my permission.
-You also may not use any fragments code contained here in another project.
+You also may not use any fragments of code contained here in another project.
