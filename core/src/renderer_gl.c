@@ -8,7 +8,13 @@
 
 #include <stdio.h>
 
+#include <phoenix/glestest.h>
+#ifndef PX_GLES
 #include <glad/glad.h>
+#else
+#include <gles3/gl3.h>
+#endif
+
 #include <SDL2/SDL.h>
 #include <phoenix/renderer.h>
 #include <phoenix/input.h>
@@ -200,12 +206,12 @@ void pxRendererInit_gl () {
     SDL_GLContext gl_ctx;
 
     SDL_Init(SDL_INIT_VIDEO);
-
+#ifndef __EMSCRIPTEN__
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
-
+#endif
     win = SDL_CreateWindow("Phoenix Game Engine", SDL_WINDOWPOS_CENTERED,
             SDL_WINDOWPOS_CENTERED, window_size_w, window_size_h,
             SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
@@ -218,16 +224,15 @@ void pxRendererInit_gl () {
         SDL_DestroyWindow(win);
         pxFatal("2D_GLRenderer", "Could not create GL context", __LINE__);
     }
-
+#ifndef __EMSCRIPTEN__
     if (!gladLoadGL())
     {
         SDL_GL_DeleteContext(gl_ctx);
         SDL_DestroyWindow(win);
         pxFatal("2D_GLRenderer", "Could not initialize OpenGL", __LINE__);
     }
-
     printf("Using OpenGL %d.%d\n", GLVersion.major, GLVersion.minor);
-
+#endif
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_TEXTURE_2D);

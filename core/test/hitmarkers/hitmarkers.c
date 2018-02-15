@@ -66,6 +66,7 @@ static px_sound_t sounds[N_SOUNDS];
 
 void tick ();
 void PlayMemeSound ();
+void RandomColor (px_color_t *);
 
 void PrintFPS (float fps) {
     printf("%f fps\n", fps);
@@ -98,6 +99,8 @@ void RespawnHitmarker (int i) {
         * pxGetWindowAspect();
     const float y = 1.8 * (rand() / (float) RAND_MAX - 0.5);
     pxSetBoxPos(hitmarkers + i, x, y);
+    pxSetRotation(&hitmarkers[i].rotation,
+        1.571 * (rand() / (float) RAND_MAX));
     ttls[TTL_HITMARKER] = respawn_interval;
 }
 
@@ -337,11 +340,12 @@ void tick () {
 int main (int argc, char **argv) {
     srand(time(NULL));
     pxRendererInit();
-    pxTimerInit();
+    pxSetVSync(1);
     pxTTFInit("crap/seguisym.ttf");
     PrepareTextures();
     pxCountFPS(PrintFPS, 1000);
     SoundsInit();
+    pxTimerInit();
 
     ttls[TTL_BOXSPAWN] = 10.f;
     SpawnHitmarkers();

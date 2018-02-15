@@ -91,7 +91,6 @@ void pxMixAudio (void *_unused, Uint8 *buffer, int buflen)
 {
     const unsigned int *bufptr = internal_buffer;
     int n_samples;
-    int channels = px_audio_spec.channels;
 
     memset(buffer, 0, buflen);
 
@@ -172,6 +171,9 @@ void pxOpenAudio (int channels, int samplerate, float bufsecs, Uint32 format,
     memset(&want, 0, sizeof(SDL_AudioSpec));
     want.freq = samplerate;
 #ifdef __APPLE__
+    /* CoreAudio is stupid and simply shits itself if you request a format other
+     * than F32, rather than correcting the SDL_AudioSpec like SDL is supposed
+     * to do. TODO: report this bug to SDL. */
     want.format = AUDIO_F32;
 #else
     want.format = format;

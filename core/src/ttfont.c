@@ -3,6 +3,8 @@
  * All rights reserved.
  */
 
+#ifndef PX_NO_TTF
+
 #include <phoenix/color.h>
 #include <phoenix/texture.h>
 #include <phoenix/ttfont.h>
@@ -45,3 +47,5 @@ px_image_t *pxRenderTextTTF (TTF_Font *font, px_color_t *color, const char *str)
     *image = (px_image_t){w, h};
     return image;
 }
+
+#endif

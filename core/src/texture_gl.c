@@ -5,7 +5,13 @@
 
 #define PX_COMPILE_GL
 
+#include <phoenix/glestest.h>
+#ifdef PX_GLES
+#include <gles3/gl3.h>
+#else
 #include <glad/glad.h>
+#endif
+
 #include <SDL2/SDL.h>
 #include <phoenix/texture.h>
 #include <phoenix/error.h>
