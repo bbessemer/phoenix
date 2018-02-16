@@ -1,0 +1,6 @@
+[package]
+name = "pxglrenderer"
+version = "0.1.0"
+authors = ["Brent Bessemer <bmb0610@gmail.com>"]
+
+[dependencies]
