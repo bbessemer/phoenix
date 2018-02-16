@@ -3,12 +3,15 @@
  * All rights reserved.
  */
 
+use super::*;
+
 pub trait Window {
     fn get_w (&self) -> u32;
     fn get_h (&self) -> u32;
     fn get_aspect (&self) -> f32;
 }
 
-pub trait Renderer {
-    fn draw (&mut self);
+pub trait Renderer2D {
+    fn draw (&mut self, objects: &Drawable);
+    fn draw_slice (&mut self, objects: &[Drawable]);
 }
