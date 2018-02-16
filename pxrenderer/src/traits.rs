@@ -8,3 +8,7 @@ pub trait Window {
     fn get_h (&self) -> u32;
     fn get_aspect (&self) -> f32;
 }
+
+pub trait Renderer {
+    fn draw (&mut self);
+}

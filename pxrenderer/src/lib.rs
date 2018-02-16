@@ -5,8 +5,8 @@
 
 pub mod geometry;
 pub mod camera;
-pub mod window_trait;
+pub mod traits;
 
 pub use geometry::{Point, Rotation, Box2D};
 pub use camera::{Camera, CameraMode};
-pub use window_trait::Window;
+pub use traits::{Window, Renderer};
