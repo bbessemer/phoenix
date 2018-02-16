@@ -4,3 +4,6 @@
  */
 
 pub mod geometry;
+pub mod camera;
+
+pub use geometry::{Point, Rotation, Box2D};
