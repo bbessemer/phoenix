@@ -4,15 +4,17 @@
  */
 
 #[repr(C)]
+#[derive(Clone, Copy)]
 pub struct Point {
-    x: f32,
-    y: f32,
+    pub x: f32,
+    pub y: f32,
 }
 
 #[repr(C)]
+#[derive(Clone, Copy)]
 pub struct Rotation {
-    cos: f32,
-    sin: f32,
+    pub cos: f32,
+    pub sin: f32,
 }
 
 impl Rotation {
@@ -29,12 +31,13 @@ impl Rotation {
 }
 
 #[repr(C)]
+#[derive(Clone, Copy)]
 pub struct Box2D {
-    x: f32,
-    y: f32,
-    w: f32,
-    h: f32,
-    rotation: Rotation,
+    pub x: f32,
+    pub y: f32,
+    pub w: f32,
+    pub h: f32,
+    pub rotation: Rotation,
 }
 
 impl Box2D {
