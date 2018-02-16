@@ -107,7 +107,10 @@ find a production engine that can do that.
 This of course begs the question of who needs 9,000 FPS. No one does—but
 performance is critical nowadays for battery reasons. If the game is capable of
 running at 9,000 FPS, but has been vsynced to 60, then for 99.3% of the time
-your CPU can turn itself off and go to sleep.
+your CPU can turn itself off and go to sleep. Well, it's not quite this simple,
+but that's the general idea. Even when running without vsync, profiling reveals
+only 8% of the CPU time is actually spent in the engine; the rest is (mostly)
+spent doing GL things.
 
 ## Licensing
 
