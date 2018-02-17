@@ -7,11 +7,15 @@ pub mod geometry;
 pub mod camera;
 pub mod traits;
 pub mod color;
+pub mod renderer;
+pub mod window;
 
 pub use geometry::{Point, Rotation, Box2D};
 pub use camera::{Camera, CameraMode};
 pub use traits::{Window, Renderer2D};
 pub use color::Color;
+pub use renderer::gl::GLRenderer;
+pub use window::sdl::SDLWindow;
 
 type Texture = u32;
 
