@@ -21,7 +21,7 @@ struct GLUniforms {
 }
 
 pub struct GLRenderer<'a> {
-    pub window: &'a SDLWindow,
+    pub window: &'a mut GLWindow,
     pub camera: Camera,
     uniforms: GLUniforms,
     program: GLuint,
@@ -158,5 +158,77 @@ impl<'a> GLRenderer<'a> {
         gl::Uniform1i(fsh_unif_tex, 0);
 
         Ok(())
+    }
+
+    pub fn init (&mut self) { unsafe {
+        self.window.get_context();
+        gl::Enable(gl::BLEND);
+        gl::BlendFunc(gl::SRC_ALPHA, gl::ONE_MINUS_SRC_ALPHA);
+        gl::Enable(gl::TEXTURE_2D);
+
+        self.init_vaos().unwrap();
+        self.init_shader_progs().unwrap();
+
+        gl::UseProgram(self.program);
+        gl::ActiveTexture(gl::TEXTURE0);
+    }}
+
+    pub fn new (window: &'a mut GLWindow) -> Self {
+        let aratio = window.get_aspect();
+        GLRenderer {
+            window,
+            camera: Camera::default().refresh(aratio),
+            uniforms: unsafe { std::mem::uninitialized() },
+            program: 0,
+            background: Color::new(0., 0., 0., 0.),
+            vao: 0,
+            vbo_vert: 0,
+            vbo_txc: 0,
+        }
+    }
+}
+
+impl<'a> Renderer2D for GLRenderer<'a> {
+    fn new_frame (&mut self) {
+        self.window.swap();
+
+        // Test for size change.
+        /*if (pxGetReqt(PX_REQT_RESIZE))
+        {
+            glViewport(0, 0, window_size_w, window_size_h);
+            pxRefreshCamera();
+        }*/
+
+        // Reset everything.
+        unsafe {
+            gl::ClearColor(self.background.r, self.background.g,
+                self.background.b, self.background.a);
+            gl::Clear(gl::COLOR_BUFFER_BIT);
+            gl::Disable(gl::DEPTH_TEST);
+
+            // Camera matrix is easy; it's common to all boxes.
+            gl::UniformMatrix4fv(self.uniforms.camera, 1, gl::FALSE,
+                self.camera.matrix.as_ptr() as *const f32);
+        }
+    }
+
+    fn set_background (&mut self, color: Color) {
+        self.background = color;
+    }
+
+    fn draw (&mut self, boxes: &[Drawable]) {
+        let mut last_texture: GLuint = 0;
+        for b in boxes {
+            if b.texture != 0 || b.color.a != 0. { unsafe {
+                gl::Uniform2fv(self.uniforms.dims, 3, &b.dims.x);
+                gl::Uniform4fv(self.uniforms.color, 1, &b.color.r);
+                gl::Uniform1ui(self.uniforms.texid, (b.texture != 0) as GLuint);
+                if b.texture != 0 && b.texture != last_texture {
+                    gl::BindTexture(gl::TEXTURE_2D, b.texture);
+                    last_texture = b.texture;
+                }
+                gl::DrawArrays(gl::TRIANGLE_STRIP, 0, 4);
+            }}
+        }
     }
 }

@@ -13,6 +13,12 @@ pub trait Window {
     }
 }
 
+pub trait GLWindow: Window {
+    fn get_context (&mut self);
+    fn swap (&mut self);
+    fn set_vsync (&mut self, vsync: bool);
+}
+
 pub trait Renderer2D {
     fn draw (&mut self, objects: &[Drawable]);
     fn new_frame (&mut self);
