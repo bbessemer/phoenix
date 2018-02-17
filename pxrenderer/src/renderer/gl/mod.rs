@@ -71,9 +71,6 @@ impl<'a> GLRenderer<'a> {
             Err("Failed to generate render array.".to_string())
         } else {
             gl::BindVertexArray(self.vao);
-
-            let err: i32 = 0;
-
             gl::EnableVertexAttribArray(INDEX_VBO_VERT);
             match Self::init_static_vbo(INDEX_VBO_VERT, &shaders::VERT_BUF) {
                 Err(msg) => return Err(msg),

@@ -4,8 +4,10 @@
  */
 
 extern crate sdl2;
+extern crate gl;
 
 use super::super::traits::{Window, GLWindow};
+use std::os::raw::c_void;
 
 pub struct SDLWindow {
     video_sys: sdl2::VideoSubsystem,
@@ -46,6 +48,7 @@ impl GLWindow for SDLWindow {
             gl_attr.set_context_version(3, 3);
         }
         self.win.gl_create_context().unwrap();
+        gl::load_with(|s| self.video_sys.gl_get_proc_address(s) as *const c_void);
     }
 
     fn swap (&mut self) {
