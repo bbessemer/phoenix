@@ -29,15 +29,6 @@ target/libphoenix.a: target/audio.o target/bmpfont.o \
 	@mkdir -p target
 	@$(AR) $@ $^
 
-hitmarkers: target/hitmarkers target/libphoenix.a
-	-./target/hitmarkers
-	rm target/hitmarkers test/hitmarkers/hitmarkers.o
-
-target/hitmarkers: test/hitmarkers/hitmarkers.o \
-	test/hitmarkers/hitmarker_image.o
-	@echo "    LD  $@"
-	$(LD) $^ -Ltarget -lphoenix $(LIBS) -o $@
-
 dots:
 	$(LD) -I $(INCLUDEDIR) test/dots.c -Ltarget -lphoenix $(LIBS) -o target/dots
 	-target/dots
