@@ -10,4 +10,4 @@
 #include "font.h"
 #include "audio.h"
 
-#define SDL_main main
+//#define SDL_main main
