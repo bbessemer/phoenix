@@ -6,7 +6,7 @@
  */
 
 const char pxShaderText_Box_V[] =
-#ifdef __EMSCRIPTEN__
+#ifdef PX_GLES
     "#version 300 es\n"
 #else
     "#version 150\n"
@@ -28,7 +28,7 @@ const char pxShaderText_Box_V[] =
     "}";
 
 const char pxShaderText_Box_FColor[] =
-#ifdef __EMSCRIPTEN__
+#ifdef PX_GLES
     "#version 300 es\n"
 #else
     "#version 150\n"
