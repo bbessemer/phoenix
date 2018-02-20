@@ -16,7 +16,7 @@ be suitable for all projects, but for the significant fraction that can be
 written in an appropriate style, significant performance improvements may be
 found by using it.
 
-## What the hell?
+## A bit of justification
 
 This is a very unusual project, for the reason that it requires the developer to
 think in a rather different way about some things. Most engines must make a
