@@ -63,3 +63,17 @@ Although I have published the source here, this is not quite an open-source
 project. You may use it for your own personal purposes, but you may not publish,
 for free or commercial purposes, anything written with it without my permission.
 You also may not use any fragments of code contained here in another project.
+
+## Building
+
+If you are on a Unix-like system and have the standard suite of C development tools installed (gcc/clang and make), building will be quite simple.
+
+First make sure you have the correct dependencies installed; on Debian/Ubuntu-based systems, that's:
+
+```
+sudo apt-get install libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev
+```
+
+Then simply `cd` to the repository root and run `make`, followed by `make dots` to build and run the test application.
+
+If you're on Windows, I can't give such specific instructions; make sure you have SDL2, SDL_image, and SDL_ttf installed. You will probably have to edit the Makefile to point to the correct library path. You should also remove `-ldl` from the `LIBS` variable; it's Linux-specific. If you are using the standard version of MinGW (not MinGW-w64), make sure you download 32-bit SDL libraries; MinGW currently only builds 32-bit code.
