@@ -16,7 +16,7 @@ be suitable for all projects, but for the significant fraction that can be
 written in an appropriate style, significant performance improvements may be
 found by using it.
 
-## What the hell?
+## A bit of justification
 
 This is a very unusual project, for the reason that it requires the developer to
 think in a rather different way about some things. Most engines must make a
@@ -37,65 +37,10 @@ additional burden for the application developer, yet the application developer
 is often far better equipped to handle it than is the engine. Many games have
 either a fixed number of objects or a number of objects which can be expected
 to remain under a reasonable fixed maximum. In this case the memory for those
-objects can be hard-coded into the application. A good example of this is the
-source code for the engine's test application (abbreviated somewhat for
-readability):
-
-```c
-static px_box_t hitmarkers[69];
-static px_box_t snoop;
-static px_box_t memes[MEME_MAX];
-static px_box_t strobes[STROBE_MAX];
-static px_box_t fashions[FASHION_MAX];
-static float ttls[N_TTLS];
-
-// Game logic ...
-
-void tick () {
-    pxInputCycle();
-    pxTimerCycle(ttls, N_TTLS);
-
-    // Game Logic ...
-
-    pxNewFrame();
-    pxDrawBoxes(hitmarkers, 69);
-    pxDrawBox(&snoop);
-    pxDrawBoxes(strobes, STROBE_MAX);
-    pxDrawBoxes(fashions, FASHION_MAX);
-    pxDrawBoxes(memes, MEME_MAX);
-}
-
-int main (int argc, char **argv) {
-    srand(time(NULL));
-    pxRendererInit();
-    pxTimerInit();
-    pxTTFInit("crap/seguisym.ttf");
-    PrepareTextures();
-    pxCountFPS(PrintFPS, 1000);
-
-    // Game logic ...
-
-    while (!pxGetReqt(PX_REQT_EXIT)) tick();
-    return 0;
-}
-```
-
-If an unknown and potentially unlimited number of objects must be used, the
+objects can be hard-coded into the application. If an unknown and potentially
+unlimited number of objects must be used, the
 developer can dynamically allocate a list as easily as the engine could;
-however, it does not need to be done every time. The other interesting part
-of the Hitmarkers source is the spawning functions, which do not so much spawn
-a new object as re-use a dead one, for example:
-
-```c
-void ShowRandomMeme (float x, float y) {
-    for (int i = 0; i < MEME_MAX; i++) if (memes[i].texture == 0) {
-        pxSetBoxDims(memes + i, x, y, 0.3, 0.3);
-        memes[i].texture = meme_texes[rand() % 13];
-        ttls[TTL_MEME_START + i] = 0.420;
-        return;
-    }
-}
-```
+however, it does not need to be done every time.
 
 ## Performance
 
@@ -118,3 +63,17 @@ Although I have published the source here, this is not quite an open-source
 project. You may use it for your own personal purposes, but you may not publish,
 for free or commercial purposes, anything written with it without my permission.
 You also may not use any fragments of code contained here in another project.
+
+## Building
+
+If you are on a Unix-like system and have the standard suite of C development tools installed (gcc/clang and make), building will be quite simple.
+
+First make sure you have the correct dependencies installed; on Debian/Ubuntu-based systems, that's:
+
+```
+sudo apt-get install libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev
+```
+
+Then simply `cd` to the repository root and run `make`, followed by `make dots` to build and run the test application.
+
+If you're on Windows, I can't give such specific instructions; make sure you have SDL2, SDL_image, and SDL_ttf installed. You will probably have to edit the Makefile to point to the correct library path. You should also remove `-ldl` from the `LIBS` variable; it's Linux-specific. If you are using the standard version of MinGW (not MinGW-w64), make sure you download 32-bit SDL libraries; MinGW currently only builds 32-bit code.
