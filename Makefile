@@ -7,9 +7,9 @@
 
 AR = ar -cr
 CFLAGS = -O3 -ffast-math -fPIC
-CC = gcc -c -g
+CC = clang -c -g
 LLC = clang -c -g -O3
-LD = cc
+LD = clang
 
 INCLUDEDIR = include
 LIBS = -lSDL2 -lSDL2_image -lSDL2_ttf -lm -ldl
