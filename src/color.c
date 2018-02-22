@@ -64,5 +64,5 @@ void pxSetColor_HSVAf (px_color_t *color, float h, float s, float v, float a) {
     }
 
     register const float m = v - chroma;
-    *color = (px_color_t) {r, g, b, a};
+    *color = (px_color_t) {r + m, g + m, b + m, a};
 }
