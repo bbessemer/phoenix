@@ -5,6 +5,9 @@
 
 #pragma once
 
+#include <math.h>
+#include <string.h>
+
 #include "texture.h"
 #include "color.h"
 
@@ -25,11 +28,34 @@ struct px_box {
 typedef struct px_box px_box_t;
 typedef struct px_rotation px_rotation_t;
 
-void pxZeroBox(px_box_t *box);
+static void pxZeroBox(px_box_t *box) {
+    memset(box, 0, sizeof(*box));
+    box->rotation.cos = 1;
+}
 
-void pxSetBoxDims (px_box_t *box, float x, float y, float w, float h);
-void pxSetBoxSize (px_box_t *box, float w, float h);
-void pxSetBoxPos (px_box_t *box, float x, float y);
+static void pxSetBoxDims (px_box_t *box, float x, float y, float w, float h) {
+    box->x = x;
+    box->y = y;
+    box->w = w;
+    box->h = h;
+}
 
-void pxSetRotation (px_rotation_t *rot, float theta);
-void pxStepRotation (px_rotation_t *rot, float dt);
+static void pxSetBoxSize (px_box_t *box, float w, float h) {
+    box->w = w;
+    box->h = h;
+}
+
+static void pxSetBoxPos (px_box_t *box, float x, float y) {
+    box->x = x;
+    box->y = y;
+}
+
+static void pxSetRotation (px_rotation_t *rot, float theta) {
+    *rot = (px_rotation_t) {cosf(theta), sinf(theta)};
+}
+
+static void pxStepRotation (px_rotation_t *rot, float dt) {
+    float c = rot->cos;
+    rot->cos = c * (1 - dt*dt / 2.) - (rot->sin * dt);
+    rot->sin = rot->sin * (1 - dt*dt / 2.) + c * dt;
+}
