@@ -15,3 +15,5 @@ callgrind.out*
 *.html
 *.html.mem
 *.js
+build.ninja
+.ninja_*
