@@ -24,9 +24,12 @@ rule archive
     description = archive $out
 ' > build.ninja
 
+destfiles=""
+
 for srcfile in src/*.c; do
     destfile=$(echo $srcfile | sed 's/src/target/;s/.c$/.o/') 
     echo "build $destfile: cc $srcfile" >> build.ninja
+    destfiles="$destfiles $destfile"
 done
 
 #for srcfile in src/*.cpp; do
@@ -34,10 +37,7 @@ done
 #    echo "build $destfile: cpp $srcfile" >> build.ninja
 #done
 
-echo "build target/libphoenix.a: archive target/audio.o target/bmpfont.o \
-    target/color.o target/default_font.o target/gl_shaders.o target/glad.o \
-    target/imgfile.o target/input.o target/renderer_gl.o target/renderer.o \
-    target/texture_gl.o target/timer.o target/ttfont.o" >> build.ninja
+echo "build target/libphoenix.a: archive $destfiles" >> build.ninja
 
 
 

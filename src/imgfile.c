@@ -15,7 +15,10 @@ px_image_t *pxLoadImage (const char *path) {
     px_image_t *image;
 
     surf = IMG_Load(path);
-    if (!surf) return NULL;
+    if (!surf) {
+        printf("Cannot load image %s\n", path);
+        return NULL;
+    }
     conv = SDL_ConvertSurfaceFormat(surf, SDL_PIXELFORMAT_ABGR8888, 0);
     if (!conv) return NULL;
     SDL_FreeSurface(surf);
