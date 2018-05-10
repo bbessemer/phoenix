@@ -26,6 +26,7 @@ void pxNewFrame_gl ();
 void pxRendererInit_gl ();
 void pxDrawBoxes_gl (px_box_t *boxes, size_t n_boxes);
 void pxDrawBox_gl (px_box_t *box);
+void pxSetWindowTitle_gl (const char*);
 
 static void pxSetVSync (int on) {
     SDL_GL_SetSwapInterval(on);
@@ -39,5 +40,6 @@ static void pxSetVSync (int on) {
 #define pxRendererInit  pxRendererInit_gl
 #define pxDrawBoxes     pxDrawBoxes_gl
 #define pxDrawBox       pxDrawBox_gl
+#define pxSetWindowTitle pxSetWindowTitle_gl
 
 #endif

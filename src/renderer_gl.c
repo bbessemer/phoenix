@@ -23,6 +23,10 @@
 SDL_Window *window;
 SDL_GLContext gl_context;
 
+void pxSetWindowTitle_gl (const char *title) {
+    SDL_SetWindowTitle(window, title);
+}
+
 static char *last_err;
 static GLuint vao;
 static GLuint vbo_vert;
