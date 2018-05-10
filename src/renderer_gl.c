@@ -203,6 +203,23 @@ static int init_shader_progs (void)
     return 0;
 }
 
+void pxRendererInit_gl2d (SDL_GLContext gl_ctx, SDL_Window *win) {
+    if (init_vaos() < 0)
+    {
+        SDL_GL_DeleteContext(gl_ctx);
+        SDL_DestroyWindow(win);
+        pxFatal("2D_GLRenderer", last_err, __LINE__);
+    }
+
+    if (init_shader_progs() < 0)
+    {
+        SDL_GL_DeleteContext(gl_ctx);
+        SDL_DestroyWindow(win);
+        pxFatal("2D_GLRenderer", last_err, __LINE__);
+    }
+    glUseProgram(prog_tex);
+}
+
 void pxRendererInit_gl () {
     pxRendererInit();
 
@@ -241,25 +258,11 @@ void pxRendererInit_gl () {
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_TEXTURE_2D);
     SDL_GL_SetSwapInterval(0);
-
-    if (init_vaos() < 0)
-    {
-        SDL_GL_DeleteContext(gl_ctx);
-        SDL_DestroyWindow(win);
-        pxFatal("2D_GLRenderer", last_err, __LINE__);
-    }
-
-    if (init_shader_progs() < 0)
-    {
-        SDL_GL_DeleteContext(gl_ctx);
-        SDL_DestroyWindow(win);
-        pxFatal("2D_GLRenderer", last_err, __LINE__);
-    }
-
+    
+    pxRendererInit_gl2d(gl_ctx, win);
     window = win;
     gl_context = gl_ctx;
-
-    glUseProgram(prog_tex);
+    
     glActiveTexture(GL_TEXTURE0);
 }
 
