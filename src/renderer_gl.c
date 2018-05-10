@@ -161,25 +161,6 @@ static int init_shader_progs (void)
         free(log);
         return -1;
     }
-/*
-    GLuint fsh_color = glCreateShader(GL_FRAGMENT_SHADER);
-    const GLchar *fsh_src = pxShaderText_Box_FColor;
-    glShaderSource(fsh_color, 1, &fsh_src, 0);
-    glCompileShader(fsh_color);
-    glGetShaderiv(fsh_color, GL_COMPILE_STATUS, &err);
-    if (err == GL_FALSE)
-    {
-        glGetShaderiv(fsh_color, GL_INFO_LOG_LENGTH, &err);
-        log = (char *)malloc(err);
-        glGetShaderInfoLog(fsh_color, err, 0, log);
-        asprintf(&last_err, "Fragment shader could not be compiled\n\n%s", log);
-        free(log);
-        return -2;
-    }
-
-    prog_color = create_shader_prog(vsh, fsh_color);
-    init_uniforms(&color_unifs, prog_color);
-*/
     GLuint fsh_tex = glCreateShader(GL_FRAGMENT_SHADER);
     const GLchar *fsht_src = pxShaderText_Box_FTexture;
     glShaderSource(fsh_tex, 1, &fsht_src, 0);
@@ -300,14 +281,4 @@ void pxDrawBoxes_gl (px_box_t *boxes, size_t n_boxes) {
         }
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     }
-}
-
-void pxDrawBox_gl (px_box_t *box) {
-    /*if (box->color.a != 0)
-    {
-        glUseProgram(prog_color);
-        glUniform2fv(color_unifs.dims, 4, (GLfloat *) box);
-        glUniform4fv(color_unifs.color, 1, (GLfloat *) &box->color);
-        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-    }*/
 }
