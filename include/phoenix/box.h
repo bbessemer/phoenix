@@ -59,3 +59,9 @@ static void pxStepRotation (px_rotation_t *rot, float dt) {
     rot->cos = c * (1 - dt*dt / 2.) - (rot->sin * dt);
     rot->sin = rot->sin * (1 - dt*dt / 2.) + c * dt;
 }
+
+static px_box_t *pxFindById (unsigned id, px_box_t *boxes, size_t n_boxes) {
+    for (size_t i = 0; i < n_boxes; i++)
+        if (boxes[i].ent_id == id) return &boxes[i];
+    return NULL;
+}
