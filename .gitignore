@@ -17,3 +17,4 @@ callgrind.out*
 *.js
 build.ninja
 .ninja_*
+build/
