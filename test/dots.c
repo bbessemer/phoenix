@@ -147,7 +147,7 @@ int main ()
 
     pxSetColor(pxBackgroundColor(), 1, 1, 1, 1);
     pxTimerInit();
-    pxSetVSync(1); // Turn on vsync so as to not murder my battery
+    pxSetVSync(0); // Turn on vsync so as to not murder my battery
     pxCountFPS(RedrawFPS, 128);
 
     OnEatPoison(); // starts new game
