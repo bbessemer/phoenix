@@ -21,7 +21,7 @@ struct px_box {
     struct px_rotation rotation;
     px_color_t color;
     px_tex_t texture;
-    unsigned int ent_id;
+    unsigned int ent_id;    
 };
 #pragma pack(pop)
 

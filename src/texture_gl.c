@@ -17,7 +17,9 @@
 #include <phoenix/error.h>
 
 px_tex_t pxMakeTexture_gl (px_image_t *img) {
-    return pxMakeTexture_Raw_gl(img->w, img->h, (px_icolor_t *)(img + 1));
+    px_tex_t tex = pxMakeTexture_Raw_gl(img->w, img->h, (px_icolor_t *)(img + 1));
+    free(img);
+    return tex;
 }
 
 px_tex_t pxMakeTexture_Raw_gl (unsigned int w, unsigned int h,
