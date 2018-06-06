@@ -29,11 +29,14 @@ def find_sdl_win ():
     config_path = subprocess.check_output(['where.exe', 'sdl2-config'])
     return os.path.join(os.path.dirname(config_path.decode('utf-8')), '..')
 
+exeext = ''
+
 if platform.system() is 'Windows':
     sdl = find_sdl_win()
     cflags += ['-target', 'x86_64-pc-windows-gnu']
     includes += ['-I ' + os.path.join(sdl, 'include')]
     libdirs += ['-L ' + os.path.join(sdl, 'lib')]
+    exeext = '.exe'
 
 n = ninja_syntax.Writer(open('build.ninja', 'w'))
 
@@ -103,4 +106,4 @@ dots_objs += n.build(os.path.join('$builddir', 'dots.o'), 'cc',
 n.newline()
 
 libphoenix = n.build(os.path.join('$builddir', 'libphoenix.a'), 'archive', objs)
-n.build(os.path.join('$builddir', 'dots.exe'), 'link', dots_objs, libphoenix)
+n.build(os.path.join('$builddir', 'dots' + exeext), 'link', dots_objs, libphoenix)
