@@ -20,4 +20,4 @@ extern "C" {
 }
 #endif
 
-//#define SDL_main main
+#define SDL_main main

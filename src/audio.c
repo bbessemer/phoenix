@@ -3,6 +3,7 @@
  * All rights reserved.
  */
 
+#include <stdio.h>
 #include <SDL2/SDL.h>
 #include <phoenix/audio.h>
 

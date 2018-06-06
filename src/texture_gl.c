@@ -18,7 +18,7 @@
 
 px_tex_t pxMakeTexture_gl (px_image_t *img) {
     px_tex_t tex = pxMakeTexture_Raw_gl(img->w, img->h, (px_icolor_t *)(img + 1));
-    free(img);
+    //free(img);
     return tex;
 }
 
