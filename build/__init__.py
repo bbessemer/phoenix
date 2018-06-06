@@ -1,1 +1,1 @@
-import ninja_syntax
+from . import ninja_syntax

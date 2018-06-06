@@ -119,7 +119,7 @@ void WambaCheck ()
     if (ttl < 0) OnEatPoison();
 }
 
-int main ()
+int main (int argc, char **argv)
 {
 	srand(time(NULL));
 
