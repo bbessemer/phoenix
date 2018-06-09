@@ -9,6 +9,16 @@
 
 typedef struct px_color {
     float r, g, b, a;
+    
+#ifdef __cplusplus
+    px_color (float r, float g, float b, float a) :
+        r(r), g(g), b(b), a(a) {}
+    px_color () : r(0), g(0), b(0), a(0) {}
+    
+    px_color (uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
+        pxSetColor_RGBAi(this, r, g, b, a);
+    }
+#endif
 } px_color_t;
 
 typedef struct px_icolor {
