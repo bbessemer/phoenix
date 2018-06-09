@@ -64,16 +64,41 @@ project. You may use it for your own personal purposes, but you may not publish,
 for free or commercial purposes, anything written with it without my permission.
 You also may not use any fragments of code contained here in another project.
 
+## Dependencies
+
+You will need a GPU with drivers that support at least OpenGL 3.3. You will also
+need to download [SDL 2](https://www.libsdl.org/),
+[SDL_image](https://www.libsdl.org/projects/SDL_image/), and
+[SDL_ttf](https://www.libsdl.org/projects/SDL_ttf/).
+
+On Linux, these can usually be found in your distribution repositories. On
+macOS, you should get them from [Homebrew](https://brew.sh):
+
+```
+brew install sdl2 sdl2_image sdl2_ttf
+```
+
+On Windows, you have to download them manually. Make sure you choose the
+"Development - MinGW" version.
+
 ## Building
 
-If you are on a Unix-like system and have the standard suite of C development tools installed (gcc/clang and make), building will be quite simple.
-
-First make sure you have the correct dependencies installed; on Debian/Ubuntu-based systems, that's:
+You will need Python, [Ninja](https://ninja-build.org), and a C compiler (GCC or
+Clang) to build Phoenix. Once you have obtained the code, open a terminal in the
+root of the repository and type
 
 ```
-sudo apt-get install libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev
+./configure.py
 ```
 
-Then simply `cd` to the repository root and run `make`, followed by `make dots` to build and run the test application.
+to generate the build file for Ninja (on Windows, you may have to type `python
+configure.py` instead). On Unix-like systems, the build system expects that all
+dependencies will be installed in a default location (typically `/usr` or
+`/usr/local`). On Windows, `configure.py` will attempt to find your SDL
+installation based on the location of the `sdl2-config` command, so this command
+(typically under `<SDL Root>\<target>\bin`) needs to be in your `PATH`. SDL2,
+SDL_image, and SDL_ttf all need to be in the same directory hierarchy.
 
-If you're on Windows, I can't give such specific instructions; make sure you have SDL2, SDL_image, and SDL_ttf installed. You will probably have to edit the Makefile to point to the correct library path. You should also remove `-ldl` from the `LIBS` variable; it's Linux-specific. If you are using the standard version of MinGW (not MinGW-w64), make sure you download 32-bit SDL libraries; MinGW currently only builds 32-bit code.
+Next type `ninja` to run the build. The build should produce two artifacts: a
+static library at `target/libphoenix.a`, and a test application at `test/dots`
+(`test\dots.exe` on Windows).
