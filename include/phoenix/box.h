@@ -33,12 +33,12 @@ struct px_box {
     inline px_box (float x, float y, float w, float h, px_tex_t tex) :
         x(x), y(y), w(w), h(h), texture(tex) {}
     
-    inline void setDims (float x, float y, float w, float h) {
+    inline void set_dims (float x, float y, float w, float h) {
         pxSetBoxDims(this, x, y, w, h);
     }
 
-    inline void pxSetBoxPos (float x, float y) { pxSetBoxPos(this, x, y); }
-    inline void pxSetBoxSize (float x, float y) { pxSetBoxSize(this, x, y); }
+    inline void set_pos (float x, float y) { pxSetBoxPos(this, x, y); }
+    inline void set_size (float x, float y) { pxSetBoxSize(this, x, y); }
 #endif
 };
 #pragma pack(pop)
