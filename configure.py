@@ -31,12 +31,17 @@ def find_sdl_win ():
 
 exeext = ''
 
-if platform.system() is 'Windows':
+if platform.system() == 'Windows':
     sdl = find_sdl_win()
     cflags += ['-target', 'x86_64-pc-windows-gnu']
     includes += ['-I ' + os.path.join(sdl, 'include')]
     libdirs += ['-L ' + os.path.join(sdl, 'lib')]
     exeext = '.exe'
+else:
+    cflags += ['-fPIC']
+
+if platform.system() == 'Linux':
+    libs += ['-ldl']
 
 n = ninja_syntax.Writer(open('build.ninja', 'w'))
 
@@ -54,44 +59,39 @@ n.variable('libs', ' '.join(libs))
 n.newline()
 
 n.rule('cc',
-       command='$cc $cflags $target $includes -c $in -o $out',
-       description='compile $in')
-
-n.rule('cpp',
-       command='$cpp $cppflags $includes -target $target -c $in -o $out',
-       description='compile $in')
+        command='$cc $cflags $target $includes -c $in -o $out',
+        description='compile $in')
 
 n.rule('link',
-       command='$cpp $cppflags $in $libdirs $libs -o $out',
-       description='link $out')
+        command='$cpp $in $libdirs $libs -o $out',
+        description='link $out')
 
 n.rule('archive',
-       command='ar -cr $out $in',
-       description='archive $out')
+        command='ar -cr $out $in',
+        description='archive $out')
 
 n.newline()
 
 c_sources = [
-    'audio',
-    'bmpfont',
-    'color',
-    'default_font',
-    'gl_shaders',
-    'glad',
-    'imgfile',
-    'input',
-    'renderer_gl',
-    'renderer',
-    'texture_gl',
-    'timer',
-    'ttfont'
-]
+        'audio',
+        'bmpfont',
+        'color',
+        'default_font',
+        'gl_shaders',
+        'glad',
+        'imgfile',
+        'input',
+        'renderer_gl',
+        'renderer',
+        'texture_gl',
+        'timer',
+        'ttfont']
 
 n.newline()
 
 def cc(src):
     return n.build(os.path.join('$builddir', src + '.o'), 'cc',
-        os.path.join('src', src + '.c'))
+            os.path.join('src', src + '.c'))
 
 objs = []
 for src in c_sources:
@@ -101,7 +101,7 @@ n.newline()
 
 dots_objs = []
 dots_objs += n.build(os.path.join('$builddir', 'dots.o'), 'cc',
-    os.path.join('test', 'dots.c'))
+        os.path.join('test', 'dots.c'))
 
 n.newline()
 
