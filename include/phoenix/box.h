@@ -13,11 +13,6 @@
 
 struct px_rotation {
     float cos, sin;
-
-#ifdef __cplusplus
-    inline px_rotation (float cos, float sin) : cos(cos), sin(sin) {}
-    inline px_rotation (float theta) : cos(cosf(theta)), sin(sinf(theta)) {}
-#endif
 };
 
 #pragma pack(push, 1)
@@ -27,23 +22,6 @@ struct px_box {
     px_color_t color;
     px_tex_t texture;
     unsigned int ent_id;
-
-#ifdef __cplusplus
-    inline px_box () : x(0), y(0), w(0), h(0),
-        rotation(0), color(0.f, 0.f, 0.f, 0.f),
-        texture(0), ent_id(0) {}
-/*
-    inline px_box (float x, float y, float w, float h, px_tex_t tex) :
-        x(x), y(y), w(w), h(h), texture(tex) {}
-    
-    inline void set_dims (float x, float y, float w, float h) {
-        pxSetBoxDims(this, x, y, w, h);
-    }
-
-    inline void set_pos (float x, float y) { pxSetBoxPos(this, x, y); }
-    inline void set_size (float x, float y) { pxSetBoxSize(this, x, y); }
-*/
-#endif
 };
 #pragma pack(pop)
 
