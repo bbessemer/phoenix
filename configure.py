@@ -63,7 +63,7 @@ n.rule('cc',
         description='compile $in')
 
 n.rule('link',
-        command='$cpp $in $libdirs $libs -o $out',
+        command='$cpp $cflags $in $libdirs $libs -o $out',
         description='link $out')
 
 n.rule('archive',
